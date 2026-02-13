@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>金価格 AI 予測ダッシュボード v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#c9a84c;--gold-light:#e8d48b;--gold-dim:rgba(201,168,76,0.12);
+  --bg:#08080c;--card:rgba(255,255,255,0.025);--border:rgba(255,255,255,0.06);
+  --border-gold:rgba(201,168,76,0.22);--text:#d4d4d8;--dim:#71717a;--muted:#52525b;
+  --up:#22c55e;--down:#ef4444;--blue:#60a5fa;--purple:#a78bfa;--amber:#f59e0b;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse at 15% 15%,rgba(201,168,76,0.035) 0%,transparent 55%),
+  radial-gradient(ellipse at 85% 85%,rgba(96,165,250,0.02) 0%,transparent 55%);
+  pointer-events:none;z-index:0}
+.app{max-width:960px;margin:0 auto;padding:24px 16px;position:relative;z-index:1}
+
+/* Header */
+.hdr{text-align:center;margin-bottom:32px}
+.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:100px;padding:5px 16px;margin-bottom:12px}
+.hdr h1{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,40px);font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;margin-bottom:6px}
+.hdr p{color:var(--dim);font-size:13px;font-weight:300}
+
+/* Status */
+.status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);justify-content:center;margin-bottom:18px}
+.dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Tabs */
+.tabs{display:flex;justify-content:center;gap:4px;margin-bottom:24px;flex-wrap:wrap}
+.tab{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:0;color:var(--dim);font:500 13px 'DM Sans',sans-serif;cursor:pointer;transition:.25s}
+.tab:hover{background:rgba(255,255,255,.035);color:var(--text)}
+.tab.on{background:var(--gold-dim);border-color:var(--border-gold);color:var(--gold);font-weight:600}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px;transition:border-color .3s}
+.card:hover{border-color:rgba(255,255,255,.1)}
+.card-t{font-size:12px;color:var(--dim);font-weight:500;margin-bottom:14px;letter-spacing:.5px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.02));border:1px solid var(--border-gold);border-radius:20px;padding:28px 20px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(201,168,76,.012) 10px,rgba(201,168,76,.012) 11px);pointer-events:none}
+.price-row{display:flex;justify-content:center;align-items:center;gap:24px;flex-wrap:wrap;position:relative}
+.price-block{text-align:center}
+.price-lbl{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.price-val{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,5vw,34px);font-weight:700;line-height:1}
+.price-unit{font-size:13px;color:var(--dim);font-weight:400}
+.arrow{font-size:20px;color:var(--gold);opacity:.5}
+.chg-badge{display:inline-block;margin-top:14px;padding:5px 16px;border-radius:100px;font:600 14px 'JetBrains Mono',monospace}
+.chg-badge.up{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--up)}
+.chg-badge.down{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--down)}
+
+/* Factor Pills */
+.factors{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:14px 0 0}
+.factor{font-size:10px;padding:4px 10px;border-radius:100px;border:1px solid var(--border);color:var(--dim);background:rgba(255,255,255,.02)}
+
+/* Metrics Grid */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px;margin-bottom:14px}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.m-lbl{font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.m-val{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.m-desc{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* Chart */
+.chart-wrap{position:relative;height:320px;margin:8px 0}
+.chart-ctrl{display:flex;gap:4px;justify-content:center;margin-bottom:10px}
+.cbtn{padding:5px 14px;border-radius:6px;font:11px 'DM Sans',sans-serif;border:1px solid var(--border);background:0;color:var(--dim);cursor:pointer;transition:.2s}
+.cbtn.on{background:var(--gold-dim);border-color:var(--border-gold);color:var(--gold)}
+
+/* Feature Bars */
+.fb-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.fb-lbl{width:130px;font-size:11px;color:var(--dim);text-align:right;flex-shrink:0}
+.fb-track{flex:1;height:24px;background:rgba(255,255,255,.025);border-radius:6px;overflow:hidden}
+.fb-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+.fb-val{font:600 10px 'JetBrains Mono',monospace;color:var(--bg)}
+
+/* Info */
+.info-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.info-row:last-child{border:0}
+.info-k{color:var(--dim)}.info-v{color:#ccc;font-weight:500}
+
+/* Explain */
+.ex-item{padding:9px 0;border-bottom:1px solid var(--border)}.ex-item:last-child{border:0}
+.ex-name{color:var(--gold);font-weight:600;font-size:13px}
+.ex-desc{color:var(--muted);font-size:12px;margin-top:2px}
+
+/* Warning */
+.warn{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.12);border-radius:12px;padding:14px;font-size:11px;color:#fca5a5;line-height:1.7;margin-top:14px}
+.warn strong{color:#f87171}
+
+/* Setup Card */
+.setup{background:rgba(201,168,76,.04);border:1px solid var(--border-gold);border-radius:14px;padding:18px;margin-bottom:14px}
+.setup h3{color:var(--gold);font-size:14px;margin-bottom:10px}
+.setup p{font-size:12px;color:var(--dim);line-height:1.8}
+.setup code{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(0,0,0,.4);padding:2px 6px;border-radius:4px;color:var(--gold-light)}
+
+/* Footer */
+.footer{text-align:center;margin-top:32px;padding-top:18px;border-top:1px solid var(--border)}
+.footer p{font-size:10px;color:var(--muted)}
+
+/* Tab visibility */
+.tc{display:none}.tc.on{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:500px){.price-row{gap:14px}.chart-wrap{height:260px}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="hdr">
+    <div class="badge">Multi-Factor AI Engine v2</div>
+    <h1>金価格予測ダッシュボード</h1>
+    <p>GradientBoosting × 10種データソース × 50+特徴量</p>
+  </div>
+
+  <div class="status">
+    <span class="dot" id="dot" style="background:var(--amber)"></span>
+    <span id="statusText">predictions.json を読み込み中...</span>
+  </div>
+
+  <div class="tabs" id="tabBar">
+    <button class="tab on" data-tab="overview">📊 概要</button>
+    <button class="tab" data-tab="chart">📈 チャート</button>
+    <button class="tab" data-tab="features">🔬 特徴量</button>
+    <button class="tab" data-tab="setup">🚀 セットアップ</button>
+  </div>
+
+  <!-- ==================== OVERVIEW ==================== -->
+  <div class="tc on" id="tc-overview">
+    <div class="hero">
+      <p style="font-size:11px;color:var(--muted);margin-bottom:16px" id="heroSubtitle">AI 5日間予測（GradientBoosting × 多因子分析）</p>
+      <div class="price-row">
+        <div class="price-block">
+          <div class="price-lbl">現在価格</div>
+          <div class="price-val" style="color:var(--text)" id="pCurrent">—<span class="price-unit">/g</span></div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="price-block">
+          <div class="price-lbl" id="pForecastLabel">5日後予測</div>
+          <div class="price-val" id="pPredicted" style="color:var(--dim)">—<span class="price-unit">/g</span></div>
+        </div>
+      </div>
+      <div class="chg-badge up" id="pBadge" style="display:none">—</div>
+      <div class="factors" id="factorPills"></div>
+    </div>
+
+    <!-- Sub info -->
+    <div class="card" id="subInfo" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;font-size:12px">
+        <div><span style="color:var(--muted)">USD/oz</span><br><strong id="infoUSD">—</strong></div>
+        <div><span style="color:var(--muted)">USD/JPY</span><br><strong id="infoJPY">—</strong></div>
+        <div><span style="color:var(--muted)">予測日</span><br><strong id="infoDate">—</strong></div>
+      </div>
+    </div>
+
+    <div class="metrics" id="metricsGrid">
+      <div class="metric"><div class="m-lbl">MAE</div><div class="m-val" style="color:var(--blue)" id="mMAE">—</div><div class="m-desc">平均絶対誤差</div></div>
+      <div class="metric"><div class="m-lbl">MAPE</div><div class="m-val" style="color:var(--amber)" id="mMAPE">—</div><div class="m-desc">平均誤差率</div></div>
+      <div class="metric"><div class="m-lbl">方向精度</div><div class="m-val" style="color:var(--up)" id="mDir">—</div><div class="m-desc">上昇/下落予測</div></div>
+      <div class="metric"><div class="m-lbl">特徴量</div><div class="m-val" style="color:var(--purple)" id="mFeat">—</div><div class="m-desc">入力変数</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-t">📈 直近の価格推移と予測</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="miniChart"></canvas></div>
+    </div>
+
+    <div class="card" id="modelInfoCard" style="display:none">
+      <div class="card-t">📋 モデル仕様</div>
+      <div id="modelInfo"></div>
+    </div>
+  </div>
+
+  <!-- ==================== CHART ==================== -->
+  <div class="tc" id="tc-chart">
+    <div class="card">
+      <div class="card-t">実績 vs 予測（JPY/グラム）</div>
+      <div class="chart-ctrl" id="rangeCtrl">
+        <button class="cbtn on" data-days="30">1M</button>
+        <button class="cbtn" data-days="90">3M</button>
+        <button class="cbtn" data-days="180">6M</button>
+        <button class="cbtn" data-days="0">全期間</button>
+      </div>
+      <div class="chart-wrap"><canvas id="mainChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t">予測誤差（予測 − 実績）</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="errChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t">USD金価格 & USD/JPY 為替</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="dualChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ==================== FEATURES ==================== -->
+  <div class="tc" id="tc-features">
+    <div class="card">
+      <div class="card-t">🏆 特徴量重要度（モデルが重視する要素）</div>
+      <div id="featBars"></div>
+    </div>
+    <div class="card">
+      <div class="card-t">📖 予測に使用するデータソース（10種）</div>
+      <div class="ex-item"><span class="ex-name">🟡 金先物 (GC=F)</span><div class="ex-desc">国際金価格（USD/オンス）— 予測の基盤データ</div></div>
+      <div class="ex-item"><span class="ex-name">💱 USD/JPY 為替</span><div class="ex-desc">ドル円レート — 円建て価格を決定する重要因子</div></div>
+      <div class="ex-item"><span class="ex-name">🛢️ WTI原油先物</span><div class="ex-desc">エネルギー価格 → インフレ期待 → 金需要に影響</div></div>
+      <div class="ex-item"><span class="ex-name">📊 S&P 500</span><div class="ex-desc">株式市場のリスク選好度。株安 → 金への資金逃避</div></div>
+      <div class="ex-item"><span class="ex-name">🏛️ 米10年債利回り</span><div class="ex-desc">実質金利が金の機会費用を決定。低金利 → 金に有利</div></div>
+      <div class="ex-item"><span class="ex-name">💵 ドル指数 (DXY)</span><div class="ex-desc">ドルと金は逆相関。ドル安 → 金高</div></div>
+      <div class="ex-item"><span class="ex-name">⚪ 銀先物</span><div class="ex-desc">金銀比率は市場センチメントの指標</div></div>
+      <div class="ex-item"><span class="ex-name">⬜ 白金先物</span><div class="ex-desc">貴金属間の相対価値の変動を検出</div></div>
+      <div class="ex-item"><span class="ex-name">😱 VIX恐怖指数</span><div class="ex-desc">市場の不安度。高VIX → 安全資産需要増</div></div>
+      <div class="ex-item"><span class="ex-name">🇯🇵 日経225</span><div class="ex-desc">日本市場の動向。円資産とのバランス</div></div>
+    </div>
+    <div class="card">
+      <div class="card-t">🧮 生成されるテクニカル指標（50+）</div>
+      <div class="ex-item"><span class="ex-name">移動平均線 (MA)</span><div class="ex-desc">5/10/20/50/100/200日 — 短期〜長期のトレンド方向</div></div>
+      <div class="ex-item"><span class="ex-name">移動平均乖離率</span><div class="ex-desc">価格がMAからどれだけ離れているか → 過熱/過冷却の判断</div></div>
+      <div class="ex-item"><span class="ex-name">RSI (14日)</span><div class="ex-desc">相対力指数 — 70以上=過買い、30以下=過売り</div></div>
+      <div class="ex-item"><span class="ex-name">MACD</span><div class="ex-desc">トレンド転換シグナル（EMA12 - EMA26）</div></div>
+      <div class="ex-item"><span class="ex-name">ボリンジャーバンド</span><div class="ex-desc">価格の標準偏差位置 → ブレイクアウト/回帰の予兆</div></div>
+      <div class="ex-item"><span class="ex-name">ボラティリティ</span><div class="ex-desc">年率換算の価格変動率 → 不確実性の度合い</div></div>
+      <div class="ex-item"><span class="ex-name">マルチタイム・リターン</span><div class="ex-desc">1/3/5/10/20/60日の変化率 → 複数時間軸のモメンタム</div></div>
+      <div class="ex-item"><span class="ex-name">金銀比率 / 金白金比率</span><div class="ex-desc">貴金属間の相対価値 → リスク選好の変化を検出</div></div>
+    </div>
+  </div>
+
+  <!-- ==================== SETUP ==================== -->
+  <div class="tc" id="tc-setup">
+    <div class="setup">
+      <h3>🚀 セットアップ手順（3ステップ）</h3>
+      <p>
+        <strong style="color:var(--gold)">Step 1:</strong> Pythonライブラリをインストール<br>
+        <code>pip install yfinance pandas numpy scikit-learn</code><br><br>
+        <strong style="color:var(--gold)">Step 2:</strong> 予測スクリプトを実行<br>
+        <code>python gold_predictor.py</code><br>
+        → <code>predictions.json</code> が生成される<br><br>
+        <strong style="color:var(--gold)">Step 3:</strong> HTMLファイルとJSONを同じフォルダに配置<br>
+        <code>index.html</code> と <code>predictions.json</code> を同じ場所に置いてブラウザで開く<br><br>
+        ⏰ <strong>毎日自動更新したい場合:</strong><br>
+        <code>crontab -e</code> で以下を追加（平日10時に実行）:<br>
+        <code>0 10 * * 1-5 cd /path && python gold_predictor.py</code>
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-t">📁 ファイル構成</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);line-height:2;padding:8px;background:rgba(0,0,0,.3);border-radius:8px">
+        📂 gold-predictor/<br>
+        ├── 📄 index.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--gold)">← このファイル</span><br>
+        ├── 🐍 gold_predictor.py &nbsp;&nbsp;<span style="color:var(--gold)">← Python予測エンジン</span><br>
+        ├── 📊 predictions.json &nbsp;&nbsp;<span style="color:var(--blue)">← 自動生成される</span><br>
+        └── 📄 model_report.txt &nbsp;&nbsp;<span style="color:var(--blue)">← 自動生成される</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-t">🌐 デプロイ方法</div>
+      <div style="font-size:12px;color:var(--dim);line-height:1.9">
+        <p><strong style="color:var(--gold)">ローカル:</strong> ブラウザで直接開く（JSONは同じフォルダに）</p>
+        <p><strong style="color:var(--gold)">GitHub Pages:</strong> リポジトリにpush → Settings → Pages → Deploy</p>
+        <p><strong style="color:var(--gold)">Netlify:</strong> ファイルをドラッグ&ドロップで即デプロイ</p>
+        <p><strong style="color:var(--gold)">自動化:</strong> GitHub Actions + cron で毎日JSONを更新</p>
+      </div>
+    </div>
+
+    <div class="warn">
+      <strong>⚠️ 重要な注意事項</strong><br>
+      • このツールは学習・研究目的のデモです<br>
+      • どんなAIモデルも市場を完璧に予測することはできません<br>
+      • 投資判断の唯一の根拠にしないでください<br>
+      • 投資は自己責任で行ってください
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Gold Price AI Prediction Dashboard v2 ｜ Educational Use Only</p>
+    <p style="margin-top:4px">GradientBoosting × 10 Data Sources × 50+ Features</p>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let DATA = null;
+let charts = {};
+
+// ============================================================
+// LOAD DATA
+// ============================================================
+async function loadData() {
+  try {
+    const res = await fetch('predictions.json');
+    if (!res.ok) throw new Error('File not found');
+    DATA = await res.json();
+    document.getElementById('dot').style.background = 'var(--up)';
+    document.getElementById('statusText').textContent =
+      `データ読み込み完了 — 最終更新: ${new Date(DATA.generated_at).toLocaleString('ja-JP')}`;
+    renderAll();
+  } catch (e) {
+    console.log('predictions.json not found, using demo data');
+    DATA = generateDemoData();
+    document.getElementById('dot').style.background = 'var(--amber)';
+    document.getElementById('statusText').textContent =
+      'デモモード — gold_predictor.py を実行して predictions.json を生成してください';
+    renderAll();
+  }
+}
+
+// ============================================================
+// DEMO DATA FALLBACK
+// ============================================================
+function generateDemoData() {
+  const chart = [];
+  const today = new Date();
+  let price = 18500;
+  for (let i = 250; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    if (d.getDay() === 0 || d.getDay() === 6) continue;
+    price += (Math.random() - 0.47) * 120 + 32;
+    price = Math.max(price, 17000);
+    const pred = price - 200 + (Math.random() - 0.5) * 500;
+    chart.push({
+      date: d.toISOString().slice(0, 10),
+      actual: Math.round(price),
+      predicted: Math.round(pred),
+      gold_usd: Math.round(price / 5.2 * 10) / 10,
+      usdjpy: 150 + (Math.random() - 0.5) * 4,
+    });
+  }
+  const last = chart[chart.length - 1];
+  last.actual = 26568;
+
+  return {
+    generated_at: new Date().toISOString(),
+    model: { algorithm: 'Demo Mode', n_estimators: 500, forecast_days: 5, data_start: '2018-01-01' },
+    prediction: {
+      date: last.date, forecast_date: '—',
+      current_jpy_gram: 26568, predicted_jpy_gram: 26800, change_pct: 0.87,
+      current_usd_oz: 5050, current_usdjpy: 152.3, direction: 'up',
+    },
+    metrics: { mae: 800, rmse: 1100, mape: 3.2, direction_accuracy: 56.0, train_samples: 1200, test_samples: 300, n_features: 50 },
+    features: [
+      { feature: 'Oil', name_ja: '原油価格', importance: 9.5 },
+      { feature: 'Gold_MA50', name_ja: '金MA50', importance: 8.2 },
+      { feature: 'SP500', name_ja: 'S&P 500', importance: 7.1 },
+      { feature: 'DXY', name_ja: 'ドル指数', importance: 6.3 },
+      { feature: 'Gold_MA100', name_ja: '金MA100', importance: 5.8 },
+      { feature: 'USDJPY', name_ja: 'USD/JPY', importance: 5.5 },
+      { feature: 'US10Y', name_ja: '米10年債', importance: 4.9 },
+      { feature: 'Volatility', name_ja: 'ボラティリティ', importance: 4.2 },
+      { feature: 'RSI_14', name_ja: 'RSI', importance: 3.8 },
+      { feature: 'VIX', name_ja: 'VIX', importance: 3.5 },
+      { feature: 'Gold_Silver', name_ja: '金銀比率', importance: 3.1 },
+      { feature: 'MACD', name_ja: 'MACD', importance: 2.8 },
+    ],
+    chart_data: chart,
+    test_data: chart.slice(-100),
+  };
+}
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+function renderAll() {
+  renderOverview();
+  renderFeatures();
+}
+
+function renderOverview() {
+  const p = DATA.prediction;
+  const m = DATA.metrics;
+  const isUp = p.direction === 'up';
+
+  // Prices
+  document.getElementById('pCurrent').innerHTML = `¥${p.current_jpy_gram.toLocaleString()}<span class="price-unit">/g</span>`;
+  document.getElementById('pPredicted').innerHTML = `¥${p.predicted_jpy_gram.toLocaleString()}<span class="price-unit">/g</span>`;
+  document.getElementById('pPredicted').style.color = isUp ? 'var(--up)' : 'var(--down)';
+  document.getElementById('pForecastLabel').textContent = `${DATA.model.forecast_days}日後予測`;
+
+  const badge = document.getElementById('pBadge');
+  badge.style.display = 'inline-block';
+  badge.className = `chg-badge ${isUp ? 'up' : 'down'}`;
+  badge.textContent = `${isUp ? '▲' : '▼'} ${Math.abs(p.change_pct)}%`;
+
+  // Factor pills
+  const topFeats = DATA.features.slice(0, 6);
+  document.getElementById('factorPills').innerHTML = topFeats
+    .map(f => `<span class="factor">${f.name_ja} ${f.importance.toFixed(1)}%</span>`).join('');
+
+  // Sub info
+  if (p.current_usd_oz) {
+    document.getElementById('subInfo').style.display = '';
+    document.getElementById('infoUSD').textContent = `$${p.current_usd_oz.toLocaleString()}`;
+    document.getElementById('infoJPY').textContent = `¥${p.current_usdjpy}`;
+    document.getElementById('infoDate').textContent = p.forecast_date || '—';
+  }
+
+  // Metrics
+  document.getElementById('mMAE').textContent = `¥${m.mae.toLocaleString()}`;
+  document.getElementById('mMAPE').textContent = `${m.mape}%`;
+  document.getElementById('mDir').textContent = `${m.direction_accuracy}%`;
+  document.getElementById('mFeat').textContent = m.n_features;
+
+  // Model info
+  document.getElementById('modelInfoCard').style.display = '';
+  document.getElementById('modelInfo').innerHTML = [
+    ['アルゴリズム', DATA.model.algorithm],
+    ['決定木数', DATA.model.n_estimators],
+    ['予測期間', `${DATA.model.forecast_days}日後`],
+    ['データ開始', DATA.model.data_start],
+    ['訓練サンプル', m.train_samples?.toLocaleString() || '—'],
+    ['テストサンプル', m.test_samples?.toLocaleString() || '—'],
+  ].map(([k, v]) => `<div class="info-row"><span class="info-k">${k}</span><span class="info-v">${v}</span></div>`).join('');
+
+  // Mini chart
+  createChart('miniChart', DATA.chart_data.slice(-40), 220);
+}
+
+function renderFeatures() {
+  const container = document.getElementById('featBars');
+  const maxVal = DATA.features[0]?.importance || 1;
+  container.innerHTML = DATA.features.map(f => `
+    <div class="fb-row">
+      <div class="fb-lbl">${f.name_ja}</div>
+      <div class="fb-track">
+        <div class="fb-fill" style="width:${(f.importance / maxVal * 100).toFixed(1)}%;">
+          <span class="fb-val">${f.importance.toFixed(1)}%</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+function chartOpts(height) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { intersect: false, mode: 'index' },
+    plugins: {
+      legend: { labels: { color: '#71717a', font: { size: 11, family: 'DM Sans' }, boxWidth: 12 } },
+      tooltip: {
+        backgroundColor: 'rgba(8,8,12,0.95)', borderColor: 'rgba(201,168,76,0.2)', borderWidth: 1,
+        titleColor: '#999', bodyColor: '#e8e8e8', titleFont: { size: 11 },
+        bodyFont: { size: 12, family: 'JetBrains Mono' }, padding: 10, cornerRadius: 8,
+        callbacks: { label: ctx => `${ctx.dataset.label}: ¥${ctx.parsed.y.toLocaleString()}` }
+      }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#52525b', font: { size: 9 }, maxTicksLimit: 10 } },
+      y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#52525b', font: { size: 10 }, callback: v => `¥${(v/1000).toFixed(0)}k` } }
+    }
+  };
+}
+
+function createChart(id, data, h) {
+  if (charts[id]) charts[id].destroy();
+  const ctx = document.getElementById(id).getContext('2d');
+  charts[id] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.map(d => d.date.slice(5)),
+      datasets: [
+        { label: '実績', data: data.map(d => d.actual), borderColor: '#c9a84c', backgroundColor: 'rgba(201,168,76,0.06)', fill: true, tension: .3, pointRadius: 0, borderWidth: 2 },
+        { label: '予測', data: data.map(d => d.predicted), borderColor: '#60a5fa', borderDash: [5,3], tension: .3, pointRadius: 0, borderWidth: 1.5, fill: false },
+      ]
+    },
+    options: chartOpts(h),
+  });
+}
+
+function createErrorChart(data) {
+  if (charts['errChart']) charts['errChart'].destroy();
+  const sampled = data.filter((_, i) => i % 3 === 0);
+  const ctx = document.getElementById('errChart').getContext('2d');
+  charts['errChart'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sampled.map(d => d.date.slice(5)),
+      datasets: [{ label: '誤差', data: sampled.map(d => d.predicted - d.actual),
+        backgroundColor: sampled.map(d => d.predicted >= d.actual ? 'rgba(34,197,94,0.5)' : 'rgba(239,68,68,0.5)'), borderRadius: 3 }]
+    },
+    options: { ...chartOpts(), plugins: { ...chartOpts().plugins, legend: { display: false } } },
+  });
+}
+
+function createDualChart(data) {
+  if (charts['dualChart']) charts['dualChart'].destroy();
+  if (!data[0]?.gold_usd) return;
+  const ctx = document.getElementById('dualChart').getContext('2d');
+  charts['dualChart'] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.map(d => d.date.slice(5)),
+      datasets: [
+        { label: 'Gold USD/oz', data: data.map(d => d.gold_usd), borderColor: '#c9a84c', tension: .3, pointRadius: 0, borderWidth: 1.5, yAxisID: 'y' },
+        { label: 'USD/JPY', data: data.map(d => d.usdjpy), borderColor: '#a78bfa', tension: .3, pointRadius: 0, borderWidth: 1.5, yAxisID: 'y1' },
+      ]
+    },
+    options: {
+      ...chartOpts(),
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#52525b', font: { size: 9 }, maxTicksLimit: 10 } },
+        y: { position: 'left', grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#c9a84c', font: { size: 10 }, callback: v => `$${v}` } },
+        y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#a78bfa', font: { size: 10 }, callback: v => `¥${v}` } },
+      }
+    }
+  });
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+document.getElementById('tabBar').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  const tab = btn.dataset.tab;
+
+  document.querySelectorAll('.tc').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('on'));
+  document.getElementById(`tc-${tab}`).classList.add('on');
+  btn.classList.add('on');
+
+  if (tab === 'chart' && DATA) {
+    setTimeout(() => {
+      const d = DATA.chart_data;
+      createChart('mainChart', d.slice(-30), 320);
+      createErrorChart(d.slice(-30));
+      createDualChart(d.slice(-60));
+    }, 50);
+  }
+});
+
+// Range controls
+document.getElementById('rangeCtrl').addEventListener('click', e => {
+  const btn = e.target.closest('.cbtn');
+  if (!btn || !DATA) return;
+  document.querySelectorAll('#rangeCtrl .cbtn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const days = parseInt(btn.dataset.days);
+  const d = DATA.chart_data;
+  const sliced = days > 0 ? d.slice(-days) : d;
+  createChart('mainChart', sliced, 320);
+  createErrorChart(sliced);
+  createDualChart(sliced);
+});
+
+// ============================================================
+// INIT
+// ============================================================
+loadData();
+</script>
+</body>
+</html>
