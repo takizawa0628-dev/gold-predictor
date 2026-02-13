@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -33,6 +35,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "Gold Prediction Bot"
+          git pull --rebase origin main
           git add predictions.json model_report.txt
           git diff --quiet --cached || git commit -m "Prediction update: $(date -u +%Y-%m-%d)"
           git push
