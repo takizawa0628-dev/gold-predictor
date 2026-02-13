@@ -16,13 +16,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Pull latest changes
-        run: git pull origin main
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -42,8 +35,7 @@ jobs:
           git config --local user.name "Gold Prediction Bot"
           git add predictions.json model_report.txt
           git diff --quiet --cached || git commit -m "Prediction update: $(date -u +%Y-%m-%d)"
-          git pull --rebase origin main
-          git push origin main
+          git push --force origin main
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
