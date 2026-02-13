@@ -1,2834 +1,2837 @@
 {
-  "generated_at": "2026-02-13T17:28:57.578571",
+  "generated_at": "2026-02-13T17:57:18.356132",
   "model": {
     "algorithm": "GradientBoostingRegressor",
+    "version": "v3",
     "n_estimators": 500,
     "forecast_days": 5,
-    "data_start": "2018-01-01"
+    "data_start": "2020-01-01",
+    "max_change_pct": 10.0
   },
   "prediction": {
     "date": "2026-02-06",
     "forecast_date": "2026-02-13",
     "current_jpy_gram": 24958,
-    "predicted_jpy_gram": 10694,
-    "change_pct": -57.15,
+    "predicted_jpy_gram": 23888,
+    "change_pct": -4.29,
     "current_usd_oz": 4951.2,
     "current_usdjpy": 156.78,
     "direction": "down"
   },
   "metrics": {
-    "mae": 5120,
-    "rmse": 6451,
-    "mape": 28.06,
-    "direction_accuracy": 36.0,
-    "train_samples": 1530,
-    "test_samples": 383,
-    "n_features": 49
+    "mae": 587,
+    "rmse": 4.124,
+    "mape": 3.12,
+    "direction_accuracy": 40.5,
+    "change_rate_mae": 3.202,
+    "train_samples": 1192,
+    "test_samples": 299,
+    "n_features": 45
   },
   "features": [
     {
-      "feature": "US10Y",
-      "name_ja": "米10年債",
-      "importance": 40.42
+      "feature": "Gold_Silver_Ratio",
+      "name_ja": "金銀比率",
+      "importance": 6.29
     },
     {
-      "feature": "DXY",
-      "name_ja": "ドル指数",
-      "importance": 23.42
-    },
-    {
-      "feature": "Gold_MA100",
-      "name_ja": "金MA100",
-      "importance": 13.37
-    },
-    {
-      "feature": "Gold_MA200",
-      "name_ja": "金MA200",
-      "importance": 12.44
-    },
-    {
-      "feature": "Gold_MA50",
-      "name_ja": "金MA50",
-      "importance": 5.75
-    },
-    {
-      "feature": "Oil",
-      "name_ja": "原油価格",
-      "importance": 1.29
-    },
-    {
-      "feature": "Gold_MA5",
-      "name_ja": "金MA5",
-      "importance": 0.77
+      "feature": "US10Y_Level",
+      "name_ja": "米10年債利回り",
+      "importance": 6.27
     },
     {
       "feature": "Gold_MA20",
       "name_ja": "金MA20",
-      "importance": 0.53
+      "importance": 4.66
     },
     {
       "feature": "Gold_MA10",
       "name_ja": "金MA10",
-      "importance": 0.48
+      "importance": 4.63
     },
     {
-      "feature": "SP500",
-      "name_ja": "S&P 500",
-      "importance": 0.37
+      "feature": "Volatility",
+      "name_ja": "ボラティリティ",
+      "importance": 3.7
     },
     {
-      "feature": "Nikkei",
-      "name_ja": "日経225",
-      "importance": 0.32
+      "feature": "Nikkei_Ret_20d",
+      "name_ja": "日経変化20日",
+      "importance": 3.42
+    },
+    {
+      "feature": "Gold_Ret_20d",
+      "name_ja": "金リターン20日",
+      "importance": 3.26
+    },
+    {
+      "feature": "VIX_Ret_20d",
+      "name_ja": "VIX変化20日",
+      "importance": 3.23
+    },
+    {
+      "feature": "Gold_MA50",
+      "name_ja": "金MA50",
+      "importance": 3.22
+    },
+    {
+      "feature": "MACD_Signal",
+      "name_ja": "MACDシグナル",
+      "importance": 3.15
+    },
+    {
+      "feature": "Gold_MA100",
+      "name_ja": "金MA100",
+      "importance": 3.0
     },
     {
       "feature": "Gold_Platinum_Ratio",
       "name_ja": "金白金比率",
-      "importance": 0.18
+      "importance": 2.95
     },
     {
-      "feature": "Gold_STD100",
-      "name_ja": "金STD100",
-      "importance": 0.1
+      "feature": "JPY_Ret_20d",
+      "name_ja": "円リターン20日",
+      "importance": 2.85
     },
     {
-      "feature": "Gold_Dev100",
-      "name_ja": "金乖離率100",
-      "importance": 0.06
+      "feature": "SP500_Ret_20d",
+      "name_ja": "S&P500変化20日",
+      "importance": 2.83
     },
     {
-      "feature": "Gold_STD50",
-      "name_ja": "金STD50",
-      "importance": 0.05
+      "feature": "DXY_Ret_20d",
+      "name_ja": "DXY変化20日",
+      "importance": 2.79
+    },
+    {
+      "feature": "JPY_Ret_10d",
+      "name_ja": "円リターン10日",
+      "importance": 2.79
+    },
+    {
+      "feature": "DXY_Ret_1d",
+      "name_ja": "DXY変化1日",
+      "importance": 2.59
+    },
+    {
+      "feature": "Oil_Ret_20d",
+      "name_ja": "原油変化20日",
+      "importance": 2.45
     },
     {
       "feature": "Month",
       "name_ja": "月",
-      "importance": 0.05
+      "importance": 2.36
     },
     {
-      "feature": "Gold_Silver_Ratio",
-      "name_ja": "金銀比率",
-      "importance": 0.04
-    },
-    {
-      "feature": "VIX_MA10",
-      "name_ja": "VIX移動平均",
-      "importance": 0.04
-    },
-    {
-      "feature": "Gold_STD20",
-      "name_ja": "金STD20",
-      "importance": 0.03
-    },
-    {
-      "feature": "Gold_Return_60d",
-      "name_ja": "金リターン60日",
-      "importance": 0.03
+      "feature": "Gold_Ret_1d",
+      "name_ja": "金リターン1日",
+      "importance": 2.3
     }
   ],
   "chart_data": [
     {
       "date": "2024-12-12",
       "actual": 13155,
-      "predicted": 11695,
+      "predicted": 13002,
       "gold_usd": 2687.5,
       "usdjpy": 152.24
     },
     {
       "date": "2024-12-13",
       "actual": 13030,
-      "predicted": 11704,
+      "predicted": 13018,
       "gold_usd": 2656.0,
       "usdjpy": 152.59
     },
     {
       "date": "2024-12-16",
       "actual": 13081,
-      "predicted": 11781,
+      "predicted": 13021,
       "gold_usd": 2651.4,
       "usdjpy": 153.45
     },
     {
       "date": "2024-12-17",
       "actual": 13100,
-      "predicted": 11781,
+      "predicted": 13079,
       "gold_usd": 2644.4,
       "usdjpy": 154.09
     },
     {
       "date": "2024-12-18",
       "actual": 13018,
-      "predicted": 11755,
+      "predicted": 13023,
       "gold_usd": 2636.5,
       "usdjpy": 153.57
     },
     {
       "date": "2024-12-19",
       "actual": 12891,
-      "predicted": 11630,
+      "predicted": 13014,
       "gold_usd": 2592.2,
       "usdjpy": 154.67
     },
     {
       "date": "2024-12-20",
       "actual": 13323,
-      "predicted": 11745,
+      "predicted": 13151,
       "gold_usd": 2628.7,
       "usdjpy": 157.64
     },
     {
       "date": "2024-12-23",
       "actual": 13147,
-      "predicted": 11671,
+      "predicted": 13287,
       "gold_usd": 2612.3,
       "usdjpy": 156.53
     },
     {
       "date": "2024-12-24",
       "actual": 13239,
-      "predicted": 11689,
+      "predicted": 13421,
       "gold_usd": 2620.0,
       "usdjpy": 157.16
     },
     {
       "date": "2024-12-25",
       "actual": 13234,
-      "predicted": 11673,
+      "predicted": 13297,
       "gold_usd": 2620.0,
       "usdjpy": 157.11
     },
     {
       "date": "2024-12-26",
       "actual": 13331,
-      "predicted": 11739,
+      "predicted": 13228,
       "gold_usd": 2638.8,
       "usdjpy": 157.13
     },
     {
       "date": "2024-12-27",
       "actual": 13274,
-      "predicted": 11708,
+      "predicted": 13344,
       "gold_usd": 2617.2,
       "usdjpy": 157.75
     },
     {
       "date": "2024-12-30",
       "actual": 13228,
-      "predicted": 11720,
+      "predicted": 13287,
       "gold_usd": 2606.1,
       "usdjpy": 157.87
     },
     {
       "date": "2024-12-31",
       "actual": 13271,
-      "predicted": 11786,
+      "predicted": 13230,
       "gold_usd": 2629.2,
       "usdjpy": 156.99
     },
     {
       "date": "2025-01-02",
       "actual": 13483,
-      "predicted": 11706,
+      "predicted": 13449,
       "gold_usd": 2658.9,
       "usdjpy": 157.72
     },
     {
       "date": "2025-01-03",
       "actual": 13382,
-      "predicted": 11785,
+      "predicted": 13376,
       "gold_usd": 2645.0,
       "usdjpy": 157.36
     },
     {
       "date": "2025-01-06",
       "actual": 13359,
-      "predicted": 11796,
+      "predicted": 13354,
       "gold_usd": 2638.4,
       "usdjpy": 157.48
     },
     {
       "date": "2025-01-07",
       "actual": 13474,
-      "predicted": 11813,
+      "predicted": 13509,
       "gold_usd": 2656.7,
       "usdjpy": 157.74
     },
     {
       "date": "2025-01-08",
       "actual": 13555,
-      "predicted": 11824,
+      "predicted": 13701,
       "gold_usd": 2664.5,
       "usdjpy": 158.24
     },
     {
       "date": "2025-01-09",
       "actual": 13650,
-      "predicted": 11831,
+      "predicted": 13714,
       "gold_usd": 2683.8,
       "usdjpy": 158.19
     },
     {
       "date": "2025-01-10",
       "actual": 13763,
-      "predicted": 11781,
+      "predicted": 13767,
       "gold_usd": 2708.5,
       "usdjpy": 158.05
     },
     {
       "date": "2025-01-13",
       "actual": 13571,
-      "predicted": 11891,
+      "predicted": 13653,
       "gold_usd": 2673.5,
       "usdjpy": 157.89
     },
     {
       "date": "2025-01-14",
       "actual": 13546,
-      "predicted": 11954,
+      "predicted": 13634,
       "gold_usd": 2677.5,
       "usdjpy": 157.36
     },
     {
       "date": "2025-01-15",
       "actual": 13783,
-      "predicted": 11879,
+      "predicted": 13762,
       "gold_usd": 2712.5,
       "usdjpy": 158.05
     },
     {
       "date": "2025-01-16",
       "actual": 13797,
-      "predicted": 11872,
+      "predicted": 13786,
       "gold_usd": 2746.4,
       "usdjpy": 156.26
     },
     {
       "date": "2025-01-17",
       "actual": 13707,
-      "predicted": 11746,
+      "predicted": 13851,
       "gold_usd": 2744.3,
       "usdjpy": 155.36
     },
     {
       "date": "2025-01-20",
       "actual": 13791,
-      "predicted": 11728,
+      "predicted": 13833,
       "gold_usd": 2744.3,
       "usdjpy": 156.31
     },
     {
       "date": "2025-01-21",
       "actual": 13751,
-      "predicted": 11730,
+      "predicted": 13670,
       "gold_usd": 2755.0,
       "usdjpy": 155.25
     },
     {
       "date": "2025-01-22",
       "actual": 13861,
-      "predicted": 11745,
+      "predicted": 13782,
       "gold_usd": 2767.6,
       "usdjpy": 155.77
     },
     {
       "date": "2025-01-23",
       "actual": 13897,
-      "predicted": 11721,
+      "predicted": 13803,
       "gold_usd": 2763.1,
       "usdjpy": 156.44
     },
     {
       "date": "2025-01-24",
       "actual": 13943,
-      "predicted": 11697,
+      "predicted": 13832,
       "gold_usd": 2777.3,
       "usdjpy": 156.15
     },
     {
       "date": "2025-01-27",
       "actual": 13707,
-      "predicted": 11710,
+      "predicted": 13756,
       "gold_usd": 2737.5,
       "usdjpy": 155.74
     },
     {
       "date": "2025-01-28",
       "actual": 13780,
-      "predicted": 11754,
+      "predicted": 13840,
       "gold_usd": 2766.8,
       "usdjpy": 154.91
     },
     {
       "date": "2025-01-29",
       "actual": 13849,
-      "predicted": 11742,
+      "predicted": 13797,
       "gold_usd": 2769.1,
       "usdjpy": 155.56
     },
     {
       "date": "2025-01-30",
       "actual": 14083,
-      "predicted": 11768,
+      "predicted": 13803,
       "gold_usd": 2823.0,
       "usdjpy": 155.17
     },
     {
       "date": "2025-01-31",
       "actual": 13934,
-      "predicted": 11703,
+      "predicted": 13834,
       "gold_usd": 2812.5,
       "usdjpy": 154.1
     },
     {
       "date": "2025-02-03",
       "actual": 14155,
-      "predicted": 11690,
+      "predicted": 13983,
       "gold_usd": 2833.9,
       "usdjpy": 155.36
     },
     {
       "date": "2025-02-04",
       "actual": 14244,
-      "predicted": 11700,
+      "predicted": 13941,
       "gold_usd": 2853.3,
       "usdjpy": 155.28
     },
     {
       "date": "2025-02-05",
       "actual": 14230,
-      "predicted": 11701,
+      "predicted": 13998,
       "gold_usd": 2871.6,
       "usdjpy": 154.13
     },
     {
       "date": "2025-02-06",
       "actual": 14013,
-      "predicted": 11707,
+      "predicted": 13912,
       "gold_usd": 2856.0,
       "usdjpy": 152.61
     },
     {
       "date": "2025-02-07",
       "actual": 13938,
-      "predicted": 11709,
+      "predicted": 13867,
       "gold_usd": 2867.3,
       "usdjpy": 151.19
     },
     {
       "date": "2025-02-10",
       "actual": 14227,
-      "predicted": 11647,
+      "predicted": 14079,
       "gold_usd": 2914.3,
       "usdjpy": 151.85
     },
     {
       "date": "2025-02-11",
       "actual": 14211,
-      "predicted": 11667,
+      "predicted": 14064,
       "gold_usd": 2912.5,
       "usdjpy": 151.76
     },
     {
       "date": "2025-02-12",
       "actual": 14285,
-      "predicted": 11735,
+      "predicted": 14179,
       "gold_usd": 2909.0,
       "usdjpy": 152.74
     },
     {
       "date": "2025-02-13",
       "actual": 14511,
-      "predicted": 11761,
+      "predicted": 14297,
       "gold_usd": 2925.9,
       "usdjpy": 154.26
     },
     {
       "date": "2025-02-14",
       "actual": 14184,
-      "predicted": 11757,
+      "predicted": 14056,
       "gold_usd": 2883.6,
       "usdjpy": 152.99
     },
     {
       "date": "2025-02-17",
       "actual": 14094,
-      "predicted": 11773,
+      "predicted": 13968,
       "gold_usd": 2883.6,
       "usdjpy": 152.02
     },
     {
       "date": "2025-02-18",
       "actual": 14274,
-      "predicted": 11783,
+      "predicted": 14132,
       "gold_usd": 2931.6,
       "usdjpy": 151.44
     },
     {
       "date": "2025-02-19",
       "actual": 14260,
-      "predicted": 11715,
+      "predicted": 14153,
       "gold_usd": 2919.4,
       "usdjpy": 151.93
     },
     {
       "date": "2025-02-20",
       "actual": 14294,
-      "predicted": 11750,
+      "predicted": 13968,
       "gold_usd": 2940.0,
       "usdjpy": 151.22
     },
     {
       "date": "2025-02-21",
       "actual": 14111,
-      "predicted": 11678,
+      "predicted": 14024,
       "gold_usd": 2937.6,
       "usdjpy": 149.41
     },
     {
       "date": "2025-02-24",
       "actual": 14158,
-      "predicted": 11732,
+      "predicted": 14029,
       "gold_usd": 2947.9,
       "usdjpy": 149.39
     },
     {
       "date": "2025-02-25",
       "actual": 13995,
-      "predicted": 11736,
+      "predicted": 13906,
       "gold_usd": 2904.5,
       "usdjpy": 149.86
     },
     {
       "date": "2025-02-26",
       "actual": 13980,
-      "predicted": 11714,
+      "predicted": 13845,
       "gold_usd": 2916.8,
       "usdjpy": 149.08
     },
     {
       "date": "2025-02-27",
       "actual": 13797,
-      "predicted": 11607,
+      "predicted": 13922,
       "gold_usd": 2883.2,
       "usdjpy": 148.84
     },
     {
       "date": "2025-02-28",
       "actual": 13682,
-      "predicted": 11594,
+      "predicted": 13681,
       "gold_usd": 2836.8,
       "usdjpy": 150.01
     },
     {
       "date": "2025-03-03",
       "actual": 14010,
-      "predicted": 11685,
+      "predicted": 13741,
       "gold_usd": 2890.2,
       "usdjpy": 150.77
     },
     {
       "date": "2025-03-04",
       "actual": 13967,
-      "predicted": 11615,
+      "predicted": 13699,
       "gold_usd": 2909.6,
       "usdjpy": 149.3
     },
     {
       "date": "2025-03-05",
       "actual": 14041,
-      "predicted": 11701,
+      "predicted": 13860,
       "gold_usd": 2915.3,
       "usdjpy": 149.8
     },
     {
       "date": "2025-03-06",
       "actual": 13962,
-      "predicted": 11629,
+      "predicted": 13748,
       "gold_usd": 2916.6,
       "usdjpy": 148.9
     },
     {
       "date": "2025-03-07",
       "actual": 13832,
-      "predicted": 11683,
+      "predicted": 13861,
       "gold_usd": 2904.7,
       "usdjpy": 148.11
     },
     {
       "date": "2025-03-10",
       "actual": 13720,
-      "predicted": 11639,
+      "predicted": 13736,
       "gold_usd": 2891.0,
       "usdjpy": 147.61
     },
     {
       "date": "2025-03-11",
       "actual": 13773,
-      "predicted": 11779,
+      "predicted": 13630,
       "gold_usd": 2912.9,
       "usdjpy": 147.07
     },
     {
       "date": "2025-03-12",
       "actual": 13989,
-      "predicted": 11772,
+      "predicted": 13637,
       "gold_usd": 2939.1,
       "usdjpy": 148.04
     },
     {
       "date": "2025-03-13",
       "actual": 14227,
-      "predicted": 11815,
+      "predicted": 13848,
       "gold_usd": 2984.3,
       "usdjpy": 148.28
     },
     {
       "date": "2025-03-14",
       "actual": 14244,
-      "predicted": 11798,
+      "predicted": 13856,
       "gold_usd": 2994.5,
       "usdjpy": 147.95
     },
     {
       "date": "2025-03-17",
       "actual": 14333,
-      "predicted": 11763,
+      "predicted": 13921,
       "gold_usd": 3000.0,
       "usdjpy": 148.6
     },
     {
       "date": "2025-03-18",
       "actual": 14577,
-      "predicted": 11757,
+      "predicted": 13987,
       "gold_usd": 3035.1,
       "usdjpy": 149.38
     },
     {
       "date": "2025-03-19",
       "actual": 14587,
-      "predicted": 11758,
+      "predicted": 14260,
       "gold_usd": 3035.9,
       "usdjpy": 149.45
     },
     {
       "date": "2025-03-20",
       "actual": 14513,
-      "predicted": 11727,
+      "predicted": 14203,
       "gold_usd": 3040.0,
       "usdjpy": 148.49
     },
     {
       "date": "2025-03-21",
       "actual": 14419,
-      "predicted": 11712,
+      "predicted": 14305,
       "gold_usd": 3018.2,
       "usdjpy": 148.6
     },
     {
       "date": "2025-03-24",
       "actual": 14500,
-      "predicted": 11697,
+      "predicted": 14284,
       "gold_usd": 3013.1,
       "usdjpy": 149.68
     },
     {
       "date": "2025-03-25",
       "actual": 14657,
-      "predicted": 11705,
+      "predicted": 14289,
       "gold_usd": 3023.7,
       "usdjpy": 150.77
     },
     {
       "date": "2025-03-26",
       "actual": 14564,
-      "predicted": 11737,
+      "predicted": 14379,
       "gold_usd": 3020.9,
       "usdjpy": 149.95
     },
     {
       "date": "2025-03-27",
       "actual": 14805,
-      "predicted": 11742,
+      "predicted": 14237,
       "gold_usd": 3060.2,
       "usdjpy": 150.47
     },
     {
       "date": "2025-03-28",
       "actual": 14969,
-      "predicted": 11710,
+      "predicted": 14631,
       "gold_usd": 3086.5,
       "usdjpy": 150.85
     },
     {
       "date": "2025-03-31",
       "actual": 15022,
-      "predicted": 11680,
+      "predicted": 14849,
       "gold_usd": 3122.8,
       "usdjpy": 149.62
     },
     {
       "date": "2025-04-01",
       "actual": 15033,
-      "predicted": 11697,
+      "predicted": 14756,
       "gold_usd": 3118.9,
       "usdjpy": 149.91
     },
     {
       "date": "2025-04-02",
       "actual": 15121,
-      "predicted": 11697,
+      "predicted": 14862,
       "gold_usd": 3139.9,
       "usdjpy": 149.78
     },
     {
       "date": "2025-04-03",
       "actual": 14724,
-      "predicted": 11708,
+      "predicted": 14767,
       "gold_usd": 3097.0,
       "usdjpy": 147.87
     },
     {
       "date": "2025-04-04",
       "actual": 14161,
-      "predicted": 11654,
+      "predicted": 14181,
       "gold_usd": 3012.0,
       "usdjpy": 146.23
     },
     {
       "date": "2025-04-07",
       "actual": 13800,
-      "predicted": 11556,
+      "predicted": 13775,
       "gold_usd": 2951.3,
       "usdjpy": 145.43
     },
     {
       "date": "2025-04-08",
       "actual": 14104,
-      "predicted": 11620,
+      "predicted": 13908,
       "gold_usd": 2968.4,
       "usdjpy": 147.79
     },
     {
       "date": "2025-04-09",
       "actual": 14332,
-      "predicted": 11596,
+      "predicted": 14161,
       "gold_usd": 3056.5,
       "usdjpy": 145.85
     },
     {
       "date": "2025-04-10",
       "actual": 14952,
-      "predicted": 11645,
+      "predicted": 14613,
       "gold_usd": 3155.2,
       "usdjpy": 147.4
     },
     {
       "date": "2025-04-11",
       "actual": 14892,
-      "predicted": 10720,
+      "predicted": 14778,
       "gold_usd": 3222.2,
       "usdjpy": 143.75
     },
     {
       "date": "2025-04-14",
       "actual": 14806,
-      "predicted": 10733,
+      "predicted": 14857,
       "gold_usd": 3204.8,
       "usdjpy": 143.7
     },
     {
       "date": "2025-04-15",
       "actual": 14821,
-      "predicted": 10690,
+      "predicted": 14708,
       "gold_usd": 3218.7,
       "usdjpy": 143.22
     },
     {
       "date": "2025-04-16",
       "actual": 15314,
-      "predicted": 10696,
+      "predicted": 15081,
       "gold_usd": 3326.6,
       "usdjpy": 143.18
     },
     {
       "date": "2025-04-17",
       "actual": 15098,
-      "predicted": 10638,
+      "predicted": 15043,
       "gold_usd": 3308.7,
       "usdjpy": 141.93
     },
     {
       "date": "2025-04-18",
       "actual": 15098,
-      "predicted": 10717,
+      "predicted": 14815,
       "gold_usd": 3308.7,
       "usdjpy": 141.93
     },
     {
       "date": "2025-04-21",
       "actual": 15543,
-      "predicted": 10669,
+      "predicted": 15077,
       "gold_usd": 3406.2,
       "usdjpy": 141.93
     },
     {
       "date": "2025-04-22",
       "actual": 15403,
-      "predicted": 10669,
+      "predicted": 15252,
       "gold_usd": 3400.8,
       "usdjpy": 140.88
     },
     {
       "date": "2025-04-23",
       "actual": 15030,
-      "predicted": 10722,
+      "predicted": 14967,
       "gold_usd": 3276.3,
       "usdjpy": 142.69
     },
     {
       "date": "2025-04-24",
       "actual": 15343,
-      "predicted": 10689,
+      "predicted": 14857,
       "gold_usd": 3332.0,
       "usdjpy": 143.22
     },
     {
       "date": "2025-04-25",
       "actual": 15078,
-      "predicted": 10715,
+      "predicted": 15020,
       "gold_usd": 3282.4,
       "usdjpy": 142.88
     },
     {
       "date": "2025-04-28",
       "actual": 15411,
-      "predicted": 10676,
+      "predicted": 14841,
       "gold_usd": 3332.5,
       "usdjpy": 143.84
     },
     {
       "date": "2025-04-29",
       "actual": 15171,
-      "predicted": 10703,
+      "predicted": 14964,
       "gold_usd": 3318.8,
       "usdjpy": 142.18
     },
     {
       "date": "2025-04-30",
       "actual": 15120,
-      "predicted": 10584,
+      "predicted": 14975,
       "gold_usd": 3305.0,
       "usdjpy": 142.3
     },
     {
       "date": "2025-05-01",
       "actual": 14759,
-      "predicted": 10536,
+      "predicted": 14625,
       "gold_usd": 3210.0,
       "usdjpy": 143.01
     },
     {
       "date": "2025-05-02",
       "actual": 15113,
-      "predicted": 10491,
+      "predicted": 14688,
       "gold_usd": 3231.9,
       "usdjpy": 145.45
     },
     {
       "date": "2025-05-05",
       "actual": 15397,
-      "predicted": 10520,
+      "predicted": 15032,
       "gold_usd": 3311.3,
       "usdjpy": 144.62
     },
     {
       "date": "2025-05-06",
       "actual": 15756,
-      "predicted": 10567,
+      "predicted": 15188,
       "gold_usd": 3411.4,
       "usdjpy": 143.65
     },
     {
       "date": "2025-05-07",
       "actual": 15550,
-      "predicted": 10670,
+      "predicted": 15181,
       "gold_usd": 3381.4,
       "usdjpy": 143.04
     },
     {
       "date": "2025-05-08",
       "actual": 15246,
-      "predicted": 10824,
+      "predicted": 15082,
       "gold_usd": 3296.6,
       "usdjpy": 143.85
     },
     {
       "date": "2025-05-09",
       "actual": 15658,
-      "predicted": 10659,
+      "predicted": 15193,
       "gold_usd": 3335.4,
       "usdjpy": 146.01
     },
     {
       "date": "2025-05-12",
       "actual": 15095,
-      "predicted": 11604,
+      "predicted": 14992,
       "gold_usd": 3220.0,
       "usdjpy": 145.81
     },
     {
       "date": "2025-05-13",
       "actual": 15451,
-      "predicted": 11459,
+      "predicted": 14892,
       "gold_usd": 3240.3,
       "usdjpy": 148.31
     },
     {
       "date": "2025-05-14",
       "actual": 15090,
-      "predicted": 11494,
+      "predicted": 14913,
       "gold_usd": 3181.4,
       "usdjpy": 147.53
     },
     {
       "date": "2025-05-15",
       "actual": 15185,
-      "predicted": 11591,
+      "predicted": 14881,
       "gold_usd": 3220.7,
       "usdjpy": 146.65
     },
     {
       "date": "2025-05-16",
       "actual": 14897,
-      "predicted": 11531,
+      "predicted": 14790,
       "gold_usd": 3182.0,
       "usdjpy": 145.61
     },
     {
       "date": "2025-05-19",
       "actual": 15084,
-      "predicted": 10644,
+      "predicted": 14770,
       "gold_usd": 3228.9,
       "usdjpy": 145.3
     },
     {
       "date": "2025-05-20",
       "actual": 15290,
-      "predicted": 10588,
+      "predicted": 15133,
       "gold_usd": 3280.3,
       "usdjpy": 144.98
     },
     {
       "date": "2025-05-21",
       "actual": 15356,
-      "predicted": 10547,
+      "predicted": 14943,
       "gold_usd": 3309.3,
       "usdjpy": 144.33
     },
     {
       "date": "2025-05-22",
       "actual": 15216,
-      "predicted": 10702,
+      "predicted": 15140,
       "gold_usd": 3292.3,
       "usdjpy": 143.76
     },
     {
       "date": "2025-05-23",
       "actual": 15557,
-      "predicted": 10670,
+      "predicted": 15242,
       "gold_usd": 3363.6,
       "usdjpy": 143.86
     },
     {
       "date": "2025-05-26",
       "actual": 15450,
-      "predicted": 10684,
+      "predicted": 15217,
       "gold_usd": 3363.6,
       "usdjpy": 142.87
     },
     {
       "date": "2025-05-27",
       "actual": 15131,
-      "predicted": 10710,
+      "predicted": 15231,
       "gold_usd": 3299.1,
       "usdjpy": 142.65
     },
     {
       "date": "2025-05-28",
       "actual": 15267,
-      "predicted": 10742,
+      "predicted": 15073,
       "gold_usd": 3293.6,
       "usdjpy": 144.18
     },
     {
       "date": "2025-05-29",
       "actual": 15538,
-      "predicted": 10665,
+      "predicted": 15138,
       "gold_usd": 3317.1,
       "usdjpy": 145.7
     },
     {
       "date": "2025-05-30",
       "actual": 15203,
-      "predicted": 10668,
+      "predicted": 15152,
       "gold_usd": 3288.9,
       "usdjpy": 143.78
     },
     {
       "date": "2025-06-02",
       "actual": 15585,
-      "predicted": 10667,
+      "predicted": 15145,
       "gold_usd": 3370.6,
       "usdjpy": 143.82
     },
     {
       "date": "2025-06-03",
       "actual": 15344,
-      "predicted": 10755,
+      "predicted": 15257,
       "gold_usd": 3350.2,
       "usdjpy": 142.45
     },
     {
       "date": "2025-06-04",
       "actual": 15601,
-      "predicted": 10729,
+      "predicted": 15227,
       "gold_usd": 3373.5,
       "usdjpy": 143.84
     },
     {
       "date": "2025-06-05",
       "actual": 15376,
-      "predicted": 10669,
+      "predicted": 15264,
       "gold_usd": 3350.7,
       "usdjpy": 142.73
     },
     {
       "date": "2025-06-06",
       "actual": 15334,
-      "predicted": 10571,
+      "predicted": 15269,
       "gold_usd": 3322.7,
       "usdjpy": 143.54
     },
     {
       "date": "2025-06-09",
       "actual": 15501,
-      "predicted": 10566,
+      "predicted": 15305,
       "gold_usd": 3332.1,
       "usdjpy": 144.69
     },
     {
       "date": "2025-06-10",
       "actual": 15432,
-      "predicted": 10644,
+      "predicted": 15355,
       "gold_usd": 3320.9,
       "usdjpy": 144.54
     },
     {
       "date": "2025-06-11",
       "actual": 15466,
-      "predicted": 10631,
+      "predicted": 15279,
       "gold_usd": 3321.3,
       "usdjpy": 144.84
     },
     {
       "date": "2025-06-12",
       "actual": 15675,
-      "predicted": 10666,
+      "predicted": 15459,
       "gold_usd": 3380.9,
       "usdjpy": 144.2
     },
     {
       "date": "2025-06-13",
       "actual": 15797,
-      "predicted": 10642,
+      "predicted": 15664,
       "gold_usd": 3431.2,
       "usdjpy": 143.19
     },
     {
       "date": "2025-06-16",
       "actual": 15734,
-      "predicted": 10632,
+      "predicted": 15654,
       "gold_usd": 3396.4,
       "usdjpy": 144.09
     },
     {
       "date": "2025-06-17",
       "actual": 15758,
-      "predicted": 10639,
+      "predicted": 15751,
       "gold_usd": 3386.6,
       "usdjpy": 144.73
     },
     {
       "date": "2025-06-18",
       "actual": 15844,
-      "predicted": 10636,
+      "predicted": 15776,
       "gold_usd": 3389.8,
       "usdjpy": 145.38
     },
     {
       "date": "2025-06-19",
       "actual": 15798,
-      "predicted": 10680,
+      "predicted": 15707,
       "gold_usd": 3389.8,
       "usdjpy": 144.96
     },
     {
       "date": "2025-06-20",
       "actual": 15725,
-      "predicted": 10681,
+      "predicted": 15655,
       "gold_usd": 3368.1,
       "usdjpy": 145.22
     },
     {
       "date": "2025-06-23",
       "actual": 15879,
-      "predicted": 10691,
+      "predicted": 15727,
       "gold_usd": 3377.7,
       "usdjpy": 146.22
     },
     {
       "date": "2025-06-24",
       "actual": 15564,
-      "predicted": 10626,
+      "predicted": 15538,
       "gold_usd": 3317.4,
       "usdjpy": 145.93
     },
     {
       "date": "2025-06-25",
       "actual": 15506,
-      "predicted": 10618,
+      "predicted": 15448,
       "gold_usd": 3327.1,
       "usdjpy": 144.96
     },
     {
       "date": "2025-06-26",
       "actual": 15530,
-      "predicted": 10563,
+      "predicted": 15482,
       "gold_usd": 3333.5,
       "usdjpy": 144.9
     },
     {
       "date": "2025-06-27",
       "actual": 15229,
-      "predicted": 10555,
+      "predicted": 15316,
       "gold_usd": 3273.7,
       "usdjpy": 144.69
     },
     {
       "date": "2025-06-30",
       "actual": 15307,
-      "predicted": 10579,
+      "predicted": 15172,
       "gold_usd": 3294.4,
       "usdjpy": 144.52
     },
     {
       "date": "2025-07-01",
       "actual": 15426,
-      "predicted": 10565,
+      "predicted": 15370,
       "gold_usd": 3336.7,
       "usdjpy": 143.8
     },
     {
       "date": "2025-07-02",
       "actual": 15436,
-      "predicted": 10545,
+      "predicted": 15363,
       "gold_usd": 3348.0,
       "usdjpy": 143.4
     },
     {
       "date": "2025-07-03",
       "actual": 15374,
-      "predicted": 10592,
+      "predicted": 15389,
       "gold_usd": 3331.6,
       "usdjpy": 143.53
     },
     {
       "date": "2025-07-04",
       "actual": 15502,
-      "predicted": 10579,
+      "predicted": 15463,
       "gold_usd": 3332.5,
       "usdjpy": 144.68
     },
     {
       "date": "2025-07-07",
       "actual": 15480,
-      "predicted": 10585,
+      "predicted": 15409,
       "gold_usd": 3332.2,
       "usdjpy": 144.5
     },
     {
       "date": "2025-07-08",
       "actual": 15512,
-      "predicted": 10707,
+      "predicted": 15492,
       "gold_usd": 3307.0,
       "usdjpy": 145.89
     },
     {
       "date": "2025-07-09",
       "actual": 15635,
-      "predicted": 10739,
+      "predicted": 15484,
       "gold_usd": 3311.6,
       "usdjpy": 146.85
     },
     {
       "date": "2025-07-10",
       "actual": 15584,
-      "predicted": 10750,
+      "predicted": 15483,
       "gold_usd": 3317.4,
       "usdjpy": 146.11
     },
     {
       "date": "2025-07-11",
       "actual": 15784,
-      "predicted": 10708,
+      "predicted": 15548,
       "gold_usd": 3356.0,
       "usdjpy": 146.29
     },
     {
       "date": "2025-07-14",
       "actual": 15871,
-      "predicted": 10751,
+      "predicted": 15728,
       "gold_usd": 3351.5,
       "usdjpy": 147.29
     },
     {
       "date": "2025-07-15",
       "actual": 15822,
-      "predicted": 10752,
+      "predicted": 15806,
       "gold_usd": 3329.8,
       "usdjpy": 147.79
     },
     {
       "date": "2025-07-16",
       "actual": 16034,
-      "predicted": 10747,
+      "predicted": 15857,
       "gold_usd": 3352.5,
       "usdjpy": 148.76
     },
     {
       "date": "2025-07-17",
       "actual": 15894,
-      "predicted": 10829,
+      "predicted": 15699,
       "gold_usd": 3340.1,
       "usdjpy": 148.0
     },
     {
       "date": "2025-07-18",
       "actual": 16002,
-      "predicted": 10775,
+      "predicted": 15770,
       "gold_usd": 3353.0,
       "usdjpy": 148.44
     },
     {
       "date": "2025-07-21",
       "actual": 16234,
-      "predicted": 10753,
+      "predicted": 15860,
       "gold_usd": 3401.9,
       "usdjpy": 148.43
     },
     {
       "date": "2025-07-22",
       "actual": 16299,
-      "predicted": 10690,
+      "predicted": 15880,
       "gold_usd": 3439.2,
       "usdjpy": 147.41
     },
     {
       "date": "2025-07-23",
       "actual": 16018,
-      "predicted": 10739,
+      "predicted": 15780,
       "gold_usd": 3394.1,
       "usdjpy": 146.79
     },
     {
       "date": "2025-07-24",
       "actual": 15861,
-      "predicted": 10759,
+      "predicted": 15751,
       "gold_usd": 3371.0,
       "usdjpy": 146.35
     },
     {
       "date": "2025-07-25",
       "actual": 15758,
-      "predicted": 10728,
+      "predicted": 15648,
       "gold_usd": 3334.0,
       "usdjpy": 147.01
     },
     {
       "date": "2025-07-28",
       "actual": 15726,
-      "predicted": 10747,
+      "predicted": 15661,
       "gold_usd": 3309.1,
       "usdjpy": 147.81
     },
     {
       "date": "2025-07-29",
       "actual": 15865,
-      "predicted": 10767,
+      "predicted": 15689,
       "gold_usd": 3323.4,
       "usdjpy": 148.48
     },
     {
       "date": "2025-07-30",
       "actual": 15729,
-      "predicted": 10828,
+      "predicted": 15681,
       "gold_usd": 3295.8,
       "usdjpy": 148.44
     },
     {
       "date": "2025-07-31",
       "actual": 15800,
-      "predicted": 10877,
+      "predicted": 15727,
       "gold_usd": 3293.2,
       "usdjpy": 149.23
     },
     {
       "date": "2025-08-01",
       "actual": 16228,
-      "predicted": 10800,
+      "predicted": 16004,
       "gold_usd": 3347.7,
       "usdjpy": 150.77
     },
     {
       "date": "2025-08-04",
       "actual": 15985,
-      "predicted": 10682,
+      "predicted": 15754,
       "gold_usd": 3374.4,
       "usdjpy": 147.34
     },
     {
       "date": "2025-08-05",
       "actual": 15961,
-      "predicted": 10704,
+      "predicted": 15769,
       "gold_usd": 3381.9,
       "usdjpy": 146.79
     },
     {
       "date": "2025-08-06",
       "actual": 16035,
-      "predicted": 10774,
+      "predicted": 15821,
       "gold_usd": 3380.0,
       "usdjpy": 147.56
     },
     {
       "date": "2025-08-07",
       "actual": 16091,
-      "predicted": 10863,
+      "predicted": 15959,
       "gold_usd": 3400.3,
       "usdjpy": 147.19
     },
     {
       "date": "2025-08-08",
       "actual": 16236,
-      "predicted": 10786,
+      "predicted": 16018,
       "gold_usd": 3439.1,
       "usdjpy": 146.84
     },
     {
       "date": "2025-08-11",
       "actual": 15919,
-      "predicted": 10826,
+      "predicted": 15878,
       "gold_usd": 3353.1,
       "usdjpy": 147.66
     },
     {
       "date": "2025-08-12",
       "actual": 15949,
-      "predicted": 10827,
+      "predicted": 15817,
       "gold_usd": 3348.9,
       "usdjpy": 148.12
     },
     {
       "date": "2025-08-13",
       "actual": 15956,
-      "predicted": 10840,
+      "predicted": 15716,
       "gold_usd": 3358.7,
       "usdjpy": 147.76
     },
     {
       "date": "2025-08-14",
       "actual": 15776,
-      "predicted": 10842,
+      "predicted": 15674,
       "gold_usd": 3335.2,
       "usdjpy": 147.12
     },
     {
       "date": "2025-08-15",
       "actual": 15841,
-      "predicted": 10875,
+      "predicted": 15705,
       "gold_usd": 3336.0,
       "usdjpy": 147.69
     },
     {
       "date": "2025-08-18",
       "actual": 15774,
-      "predicted": 10872,
+      "predicted": 15662,
       "gold_usd": 3331.7,
       "usdjpy": 147.26
     },
     {
       "date": "2025-08-19",
       "actual": 15757,
-      "predicted": 10866,
+      "predicted": 15748,
       "gold_usd": 3313.4,
       "usdjpy": 147.92
     },
     {
       "date": "2025-08-20",
       "actual": 15880,
-      "predicted": 10846,
+      "predicted": 15715,
       "gold_usd": 3343.4,
       "usdjpy": 147.73
     },
     {
       "date": "2025-08-21",
       "actual": 15805,
-      "predicted": 10849,
+      "predicted": 15656,
       "gold_usd": 3336.9,
       "usdjpy": 147.32
     },
     {
       "date": "2025-08-22",
       "actual": 16098,
-      "predicted": 10843,
+      "predicted": 15725,
       "gold_usd": 3374.4,
       "usdjpy": 148.39
     },
     {
       "date": "2025-08-25",
       "actual": 15968,
-      "predicted": 10859,
+      "predicted": 15742,
       "gold_usd": 3373.8,
       "usdjpy": 147.21
     },
     {
       "date": "2025-08-26",
       "actual": 16105,
-      "predicted": 10861,
+      "predicted": 15793,
       "gold_usd": 3388.6,
       "usdjpy": 147.82
     },
     {
       "date": "2025-08-27",
       "actual": 16141,
-      "predicted": 10847,
+      "predicted": 15915,
       "gold_usd": 3404.6,
       "usdjpy": 147.46
     },
     {
       "date": "2025-08-28",
       "actual": 16254,
-      "predicted": 10794,
+      "predicted": 15773,
       "gold_usd": 3431.8,
       "usdjpy": 147.32
     },
     {
       "date": "2025-08-29",
       "actual": 16394,
-      "predicted": 10828,
+      "predicted": 15821,
       "gold_usd": 3473.7,
       "usdjpy": 146.79
     },
     {
       "date": "2025-09-01",
       "actual": 16428,
-      "predicted": 10764,
+      "predicted": 15931,
       "gold_usd": 3473.7,
       "usdjpy": 147.1
     },
     {
       "date": "2025-09-02",
       "actual": 16785,
-      "predicted": 10756,
+      "predicted": 16220,
       "gold_usd": 3549.4,
       "usdjpy": 147.08
     },
     {
       "date": "2025-09-03",
       "actual": 17161,
-      "predicted": 10747,
+      "predicted": 16611,
       "gold_usd": 3593.2,
       "usdjpy": 148.55
     },
     {
       "date": "2025-09-04",
       "actual": 16965,
-      "predicted": 10823,
+      "predicted": 16659,
       "gold_usd": 3565.8,
       "usdjpy": 147.98
     },
     {
       "date": "2025-09-05",
       "actual": 17236,
-      "predicted": 10833,
+      "predicted": 16709,
       "gold_usd": 3613.2,
       "usdjpy": 148.38
     },
     {
       "date": "2025-09-08",
       "actual": 17351,
-      "predicted": 10841,
+      "predicted": 16930,
       "gold_usd": 3638.1,
       "usdjpy": 148.34
     },
     {
       "date": "2025-09-09",
       "actual": 17261,
-      "predicted": 10822,
+      "predicted": 17059,
       "gold_usd": 3643.3,
       "usdjpy": 147.36
     },
     {
       "date": "2025-09-10",
       "actual": 17266,
-      "predicted": 10841,
+      "predicted": 17111,
       "gold_usd": 3643.6,
       "usdjpy": 147.39
     },
     {
       "date": "2025-09-11",
       "actual": 17227,
-      "predicted": 10833,
+      "predicted": 16947,
       "gold_usd": 3636.9,
       "usdjpy": 147.33
     },
     {
       "date": "2025-09-12",
       "actual": 17274,
-      "predicted": 10843,
+      "predicted": 17062,
       "gold_usd": 3649.4,
       "usdjpy": 147.22
     },
     {
       "date": "2025-09-15",
       "actual": 17481,
-      "predicted": 10817,
+      "predicted": 17140,
       "gold_usd": 3682.2,
       "usdjpy": 147.67
     },
     {
       "date": "2025-09-16",
       "actual": 17482,
-      "predicted": 10801,
+      "predicted": 17126,
       "gold_usd": 3688.9,
       "usdjpy": 147.4
     },
     {
       "date": "2025-09-17",
       "actual": 17331,
-      "predicted": 10825,
+      "predicted": 17201,
       "gold_usd": 3681.8,
       "usdjpy": 146.41
     },
     {
       "date": "2025-09-18",
       "actual": 17208,
-      "predicted": 10842,
+      "predicted": 17146,
       "gold_usd": 3643.7,
       "usdjpy": 146.89
     },
     {
       "date": "2025-09-19",
       "actual": 17464,
-      "predicted": 10827,
+      "predicted": 17238,
       "gold_usd": 3671.5,
       "usdjpy": 147.95
     },
     {
       "date": "2025-09-22",
       "actual": 17811,
-      "predicted": 10824,
+      "predicted": 17448,
       "gold_usd": 3740.7,
       "usdjpy": 148.1
     },
     {
       "date": "2025-09-23",
       "actual": 17956,
-      "predicted": 10812,
+      "predicted": 17467,
       "gold_usd": 3780.6,
       "usdjpy": 147.73
     },
     {
       "date": "2025-09-24",
       "actual": 17712,
-      "predicted": 10786,
+      "predicted": 17529,
       "gold_usd": 3732.1,
       "usdjpy": 147.61
     },
     {
       "date": "2025-09-25",
       "actual": 17872,
-      "predicted": 10840,
+      "predicted": 17595,
       "gold_usd": 3736.9,
       "usdjpy": 148.75
     },
     {
       "date": "2025-09-26",
       "actual": 18190,
-      "predicted": 10823,
+      "predicted": 17720,
       "gold_usd": 3775.3,
       "usdjpy": 149.86
     },
     {
       "date": "2025-09-29",
       "actual": 18354,
-      "predicted": 10812,
+      "predicted": 17788,
       "gold_usd": 3820.9,
       "usdjpy": 149.4
     },
     {
       "date": "2025-09-30",
       "actual": 18349,
-      "predicted": 10827,
+      "predicted": 17781,
       "gold_usd": 3840.8,
       "usdjpy": 148.6
     },
     {
       "date": "2025-10-01",
       "actual": 18402,
-      "predicted": 10825,
+      "predicted": 17972,
       "gold_usd": 3867.5,
       "usdjpy": 148.0
     },
     {
       "date": "2025-10-02",
       "actual": 18157,
-      "predicted": 10817,
+      "predicted": 18011,
       "gold_usd": 3839.7,
       "usdjpy": 147.08
     },
     {
       "date": "2025-10-03",
       "actual": 18360,
-      "predicted": 10837,
+      "predicted": 17989,
       "gold_usd": 3880.8,
       "usdjpy": 147.15
     },
     {
       "date": "2025-10-06",
       "actual": 18992,
-      "predicted": 10835,
+      "predicted": 18521,
       "gold_usd": 3948.5,
       "usdjpy": 149.61
     },
     {
       "date": "2025-10-07",
       "actual": 19220,
-      "predicted": 10769,
+      "predicted": 18789,
       "gold_usd": 3976.6,
       "usdjpy": 150.33
     },
     {
       "date": "2025-10-08",
       "actual": 19766,
-      "predicted": 10787,
+      "predicted": 19120,
       "gold_usd": 4043.3,
       "usdjpy": 152.05
     },
     {
       "date": "2025-10-09",
       "actual": 19371,
-      "predicted": 10805,
+      "predicted": 18972,
       "gold_usd": 3946.3,
       "usdjpy": 152.68
     },
     {
       "date": "2025-10-10",
       "actual": 19553,
-      "predicted": 10664,
+      "predicted": 18670,
       "gold_usd": 3975.9,
       "usdjpy": 152.96
     },
     {
       "date": "2025-10-13",
       "actual": 20086,
-      "predicted": 10770,
+      "predicted": 19501,
       "gold_usd": 4108.6,
       "usdjpy": 152.06
     },
     {
       "date": "2025-10-14",
       "actual": 20283,
-      "predicted": 10718,
+      "predicted": 19529,
       "gold_usd": 4138.7,
       "usdjpy": 152.43
     },
     {
       "date": "2025-10-15",
       "actual": 20376,
-      "predicted": 10704,
+      "predicted": 19560,
       "gold_usd": 4176.9,
       "usdjpy": 151.73
     },
     {
       "date": "2025-10-16",
       "actual": 20776,
-      "predicted": 10711,
+      "predicted": 19966,
       "gold_usd": 4280.2,
       "usdjpy": 150.97
     },
     {
       "date": "2025-10-17",
       "actual": 20222,
-      "predicted": 10763,
+      "predicted": 19858,
       "gold_usd": 4189.9,
       "usdjpy": 150.12
     },
     {
       "date": "2025-10-20",
       "actual": 21038,
-      "predicted": 10734,
+      "predicted": 20618,
       "gold_usd": 4336.4,
       "usdjpy": 150.9
     },
     {
       "date": "2025-10-21",
       "actual": 19815,
-      "predicted": 10739,
+      "predicted": 19704,
       "gold_usd": 4087.7,
       "usdjpy": 150.77
     },
     {
       "date": "2025-10-22",
       "actual": 19751,
-      "predicted": 10692,
+      "predicted": 19534,
       "gold_usd": 4044.4,
       "usdjpy": 151.89
     },
     {
       "date": "2025-10-23",
       "actual": 20155,
-      "predicted": 10708,
+      "predicted": 19784,
       "gold_usd": 4125.5,
       "usdjpy": 151.95
     },
     {
       "date": "2025-10-24",
       "actual": 20206,
-      "predicted": 10714,
+      "predicted": 19820,
       "gold_usd": 4118.4,
       "usdjpy": 152.6
     },
     {
       "date": "2025-10-27",
       "actual": 19693,
-      "predicted": 10624,
+      "predicted": 19417,
       "gold_usd": 4001.9,
       "usdjpy": 153.06
     },
     {
       "date": "2025-10-28",
       "actual": 19471,
-      "predicted": 10609,
+      "predicted": 19216,
       "gold_usd": 3966.2,
       "usdjpy": 152.69
     },
     {
       "date": "2025-10-29",
       "actual": 19434,
-      "predicted": 10635,
+      "predicted": 19132,
       "gold_usd": 3983.7,
       "usdjpy": 151.73
     },
     {
       "date": "2025-10-30",
       "actual": 19647,
-      "predicted": 10664,
+      "predicted": 19392,
       "gold_usd": 4001.3,
       "usdjpy": 152.72
     },
     {
       "date": "2025-10-31",
       "actual": 19704,
-      "predicted": 10659,
+      "predicted": 19494,
       "gold_usd": 3982.2,
       "usdjpy": 153.9
     },
     {
       "date": "2025-11-03",
       "actual": 19831,
-      "predicted": 10652,
+      "predicted": 19560,
       "gold_usd": 4000.3,
       "usdjpy": 154.2
     },
     {
       "date": "2025-11-04",
       "actual": 19572,
-      "predicted": 10695,
+      "predicted": 19412,
       "gold_usd": 3947.7,
       "usdjpy": 154.2
     },
     {
       "date": "2025-11-05",
       "actual": 19651,
-      "predicted": 10690,
+      "predicted": 19279,
       "gold_usd": 3980.3,
       "usdjpy": 153.56
     },
     {
       "date": "2025-11-06",
       "actual": 19715,
-      "predicted": 10694,
+      "predicted": 19280,
       "gold_usd": 3979.9,
       "usdjpy": 154.07
     },
     {
       "date": "2025-11-07",
       "actual": 19667,
-      "predicted": 10685,
+      "predicted": 19246,
       "gold_usd": 3999.4,
       "usdjpy": 152.95
     },
     {
       "date": "2025-11-10",
       "actual": 20334,
-      "predicted": 10792,
+      "predicted": 19907,
       "gold_usd": 4111.8,
       "usdjpy": 153.82
     },
     {
       "date": "2025-11-11",
       "actual": 20353,
-      "predicted": 10774,
+      "predicted": 19917,
       "gold_usd": 4106.8,
       "usdjpy": 154.15
     },
     {
       "date": "2025-11-12",
       "actual": 20827,
-      "predicted": 10740,
+      "predicted": 20246,
       "gold_usd": 4204.4,
       "usdjpy": 154.07
     },
     {
       "date": "2025-11-13",
       "actual": 20826,
-      "predicted": 10719,
+      "predicted": 20414,
       "gold_usd": 4186.9,
       "usdjpy": 154.71
     },
     {
       "date": "2025-11-14",
       "actual": 20322,
-      "predicted": 10774,
+      "predicted": 20212,
       "gold_usd": 4087.6,
       "usdjpy": 154.63
     },
     {
       "date": "2025-11-17",
       "actual": 20220,
-      "predicted": 10853,
+      "predicted": 20153,
       "gold_usd": 4068.3,
       "usdjpy": 154.59
     },
     {
       "date": "2025-11-18",
       "actual": 20275,
-      "predicted": 10792,
+      "predicted": 19841,
       "gold_usd": 4061.3,
       "usdjpy": 155.27
     },
     {
       "date": "2025-11-19",
       "actual": 20392,
-      "predicted": 10813,
+      "predicted": 20113,
       "gold_usd": 4077.7,
       "usdjpy": 155.55
     },
     {
       "date": "2025-11-20",
       "actual": 20475,
-      "predicted": 10735,
+      "predicted": 20203,
       "gold_usd": 4056.5,
       "usdjpy": 156.99
     },
     {
       "date": "2025-11-21",
       "actual": 20626,
-      "predicted": 10743,
+      "predicted": 20360,
       "gold_usd": 4076.7,
       "usdjpy": 157.37
     },
     {
       "date": "2025-11-24",
       "actual": 20613,
-      "predicted": 10814,
+      "predicted": 20316,
       "gold_usd": 4091.9,
       "usdjpy": 156.69
     },
     {
       "date": "2025-11-25",
       "actual": 20885,
-      "predicted": 10803,
+      "predicted": 20422,
       "gold_usd": 4139.2,
       "usdjpy": 156.94
     },
     {
       "date": "2025-11-26",
       "actual": 20921,
-      "predicted": 10710,
+      "predicted": 20518,
       "gold_usd": 4165.2,
       "usdjpy": 156.23
     },
     {
       "date": "2025-11-27",
       "actual": 20923,
-      "predicted": 10793,
+      "predicted": 20568,
       "gold_usd": 4165.2,
       "usdjpy": 156.24
     },
     {
       "date": "2025-11-28",
       "actual": 21195,
-      "predicted": 10720,
+      "predicted": 20587,
       "gold_usd": 4218.3,
       "usdjpy": 156.28
     },
     {
       "date": "2025-12-01",
       "actual": 21252,
-      "predicted": 10751,
+      "predicted": 20626,
       "gold_usd": 4239.3,
       "usdjpy": 155.93
     },
     {
       "date": "2025-12-02",
       "actual": 20938,
-      "predicted": 10748,
+      "predicted": 20589,
       "gold_usd": 4186.6,
       "usdjpy": 155.56
     },
     {
       "date": "2025-12-03",
       "actual": 21036,
-      "predicted": 10717,
+      "predicted": 20424,
       "gold_usd": 4199.3,
       "usdjpy": 155.81
     },
     {
       "date": "2025-12-04",
       "actual": 21003,
-      "predicted": 10810,
+      "predicted": 20458,
       "gold_usd": 4211.8,
       "usdjpy": 155.11
     },
     {
       "date": "2025-12-05",
       "actual": 21014,
-      "predicted": 10843,
+      "predicted": 20510,
       "gold_usd": 4212.9,
       "usdjpy": 155.14
     },
     {
       "date": "2025-12-08",
       "actual": 20912,
-      "predicted": 10777,
+      "predicted": 20550,
       "gold_usd": 4187.2,
       "usdjpy": 155.34
     },
     {
       "date": "2025-12-09",
       "actual": 21078,
-      "predicted": 10824,
+      "predicted": 20483,
       "gold_usd": 4206.7,
       "usdjpy": 155.84
     },
     {
       "date": "2025-12-10",
       "actual": 21160,
-      "predicted": 10788,
+      "predicted": 20446,
       "gold_usd": 4196.4,
       "usdjpy": 156.84
     },
     {
       "date": "2025-12-11",
       "actual": 21465,
-      "predicted": 10768,
+      "predicted": 20707,
       "gold_usd": 4285.5,
       "usdjpy": 155.79
     },
     {
       "date": "2025-12-12",
       "actual": 21507,
-      "predicted": 10762,
+      "predicted": 20822,
       "gold_usd": 4300.1,
       "usdjpy": 155.57
     },
     {
       "date": "2025-12-15",
       "actual": 21585,
-      "predicted": 10779,
+      "predicted": 20801,
       "gold_usd": 4306.7,
       "usdjpy": 155.89
     },
     {
       "date": "2025-12-16",
       "actual": 21453,
-      "predicted": 10790,
+      "predicted": 20712,
       "gold_usd": 4304.5,
       "usdjpy": 155.01
     },
     {
       "date": "2025-12-17",
       "actual": 21634,
-      "predicted": 10780,
+      "predicted": 20760,
       "gold_usd": 4347.5,
       "usdjpy": 154.78
     },
     {
       "date": "2025-12-18",
       "actual": 21694,
-      "predicted": 10752,
+      "predicted": 20973,
       "gold_usd": 4339.5,
       "usdjpy": 155.49
     },
     {
       "date": "2025-12-19",
       "actual": 21817,
-      "predicted": 10743,
+      "predicted": 20922,
       "gold_usd": 4361.4,
       "usdjpy": 155.59
     },
     {
       "date": "2025-12-22",
       "actual": 22531,
-      "predicted": 10719,
+      "predicted": 21229,
       "gold_usd": 4444.6,
       "usdjpy": 157.68
     },
     {
       "date": "2025-12-23",
       "actual": 22610,
-      "predicted": 10639,
+      "predicted": 21342,
       "gold_usd": 4482.8,
       "usdjpy": 156.88
     },
     {
       "date": "2025-12-24",
       "actual": 22498,
-      "predicted": 10750,
+      "predicted": 21470,
       "gold_usd": 4480.6,
       "usdjpy": 156.18
     },
     {
       "date": "2025-12-25",
       "actual": 22498,
-      "predicted": 10754,
+      "predicted": 21509,
       "gold_usd": 4480.6,
       "usdjpy": 156.18
     },
     {
       "date": "2025-12-26",
       "actual": 22729,
-      "predicted": 10645,
+      "predicted": 21785,
       "gold_usd": 4529.1,
       "usdjpy": 156.09
     },
     {
       "date": "2025-12-29",
       "actual": 21757,
-      "predicted": 10688,
+      "predicted": 21019,
       "gold_usd": 4325.1,
       "usdjpy": 156.46
     },
     {
       "date": "2025-12-30",
       "actual": 21920,
-      "predicted": 10621,
+      "predicted": 21080,
       "gold_usd": 4370.1,
       "usdjpy": 156.01
     },
     {
       "date": "2025-12-31",
       "actual": 21753,
-      "predicted": 10643,
+      "predicted": 21268,
       "gold_usd": 4325.6,
       "usdjpy": 156.41
     },
     {
       "date": "2026-01-02",
       "actual": 21740,
-      "predicted": 10633,
+      "predicted": 21247,
       "gold_usd": 4314.4,
       "usdjpy": 156.73
     },
     {
       "date": "2026-01-05",
       "actual": 22394,
-      "predicted": 10574,
+      "predicted": 21380,
       "gold_usd": 4436.9,
       "usdjpy": 156.99
     },
     {
       "date": "2026-01-06",
       "actual": 22571,
-      "predicted": 10604,
+      "predicted": 21660,
       "gold_usd": 4482.2,
       "usdjpy": 156.63
     },
     {
       "date": "2026-01-07",
       "actual": 22413,
-      "predicted": 10574,
+      "predicted": 21627,
       "gold_usd": 4449.3,
       "usdjpy": 156.68
     },
     {
       "date": "2026-01-08",
       "actual": 22422,
-      "predicted": 10576,
+      "predicted": 21761,
       "gold_usd": 4449.7,
       "usdjpy": 156.73
     },
     {
       "date": "2026-01-09",
       "actual": 22648,
-      "predicted": 10596,
+      "predicted": 21962,
       "gold_usd": 4490.3,
       "usdjpy": 156.88
     },
     {
       "date": "2026-01-12",
       "actual": 23411,
-      "predicted": 10655,
+      "predicted": 22504,
       "gold_usd": 4604.3,
       "usdjpy": 158.15
     },
     {
       "date": "2026-01-13",
       "actual": 23310,
-      "predicted": 10644,
+      "predicted": 22535,
       "gold_usd": 4589.2,
       "usdjpy": 157.99
     },
     {
       "date": "2026-01-14",
       "actual": 23676,
-      "predicted": 10616,
+      "predicted": 22798,
       "gold_usd": 4626.3,
       "usdjpy": 159.18
     },
     {
       "date": "2026-01-15",
       "actual": 23510,
-      "predicted": 10639,
+      "predicted": 22736,
       "gold_usd": 4616.3,
       "usdjpy": 158.4
     },
     {
       "date": "2026-01-16",
       "actual": 23396,
-      "predicted": 10758,
+      "predicted": 22760,
       "gold_usd": 4588.4,
       "usdjpy": 158.6
     },
     {
       "date": "2026-01-19",
       "actual": 23240,
-      "predicted": 10775,
+      "predicted": 22669,
       "gold_usd": 4588.4,
       "usdjpy": 157.54
     },
     {
       "date": "2026-01-20",
       "actual": 24205,
-      "predicted": 10652,
+      "predicted": 22957,
       "gold_usd": 4759.6,
       "usdjpy": 158.18
     },
     {
       "date": "2026-01-21",
       "actual": 24570,
-      "predicted": 10661,
+      "predicted": 23584,
       "gold_usd": 4831.8,
       "usdjpy": 158.16
     },
     {
       "date": "2026-01-22",
       "actual": 25008,
-      "predicted": 10604,
+      "predicted": 23774,
       "gold_usd": 4908.8,
       "usdjpy": 158.46
     },
     {
       "date": "2026-01-23",
       "actual": 25358,
-      "predicted": 10636,
+      "predicted": 24144,
       "gold_usd": 4976.2,
       "usdjpy": 158.5
     },
     {
       "date": "2026-01-26",
       "actual": 25341,
-      "predicted": 10636,
+      "predicted": 24098,
       "gold_usd": 5079.7,
       "usdjpy": 155.17
     },
     {
       "date": "2026-01-27",
       "actual": 25207,
-      "predicted": 10659,
+      "predicted": 24010,
       "gold_usd": 5079.9,
       "usdjpy": 154.34
     },
     {
       "date": "2026-01-28",
       "actual": 25986,
-      "predicted": 10688,
+      "predicted": 25127,
       "gold_usd": 5301.6,
       "usdjpy": 152.45
     },
     {
       "date": "2026-01-29",
       "actual": 26178,
-      "predicted": 10684,
+      "predicted": 24955,
       "gold_usd": 5318.4,
       "usdjpy": 153.1
     },
     {
       "date": "2026-01-30",
       "actual": 23213,
-      "predicted": 10710,
+      "predicted": 22821,
       "gold_usd": 4713.9,
       "usdjpy": 153.16
     },
     {
       "date": "2026-02-02",
       "actual": 23066,
-      "predicted": 10694,
+      "predicted": 22707,
       "gold_usd": 4622.5,
       "usdjpy": 155.2
     },
     {
       "date": "2026-02-03",
       "actual": 24507,
-      "predicted": 10667,
+      "predicted": 23850,
       "gold_usd": 4903.7,
       "usdjpy": 155.44
     },
     {
       "date": "2026-02-04",
       "actual": 24647,
-      "predicted": 10684,
+      "predicted": 23830,
       "gold_usd": 4920.4,
       "usdjpy": 155.8
     },
     {
       "date": "2026-02-05",
       "actual": 24526,
-      "predicted": 10616,
+      "predicted": 23767,
       "gold_usd": 4861.4,
       "usdjpy": 156.92
     },
     {
       "date": "2026-02-06",
       "actual": 24958,
-      "predicted": 10694,
+      "predicted": 23888,
       "gold_usd": 4951.2,
       "usdjpy": 156.78
     }
   ],
   "test_data": [
     {
-      "date": "2024-12-09",
-      "actual": 13081,
-      "predicted": 11831
-    },
-    {
-      "date": "2024-12-10",
-      "actual": 13100,
-      "predicted": 11838
-    },
-    {
-      "date": "2024-12-11",
-      "actual": 13018,
-      "predicted": 11767
-    },
-    {
-      "date": "2024-12-12",
-      "actual": 12891,
-      "predicted": 11695
-    },
-    {
-      "date": "2024-12-13",
-      "actual": 13323,
-      "predicted": 11704
-    },
-    {
-      "date": "2024-12-16",
-      "actual": 13147,
-      "predicted": 11781
-    },
-    {
-      "date": "2024-12-17",
-      "actual": 13239,
-      "predicted": 11781
-    },
-    {
-      "date": "2024-12-18",
-      "actual": 13234,
-      "predicted": 11755
-    },
-    {
-      "date": "2024-12-19",
-      "actual": 13331,
-      "predicted": 11630
-    },
-    {
-      "date": "2024-12-20",
-      "actual": 13274,
-      "predicted": 11745
-    },
-    {
-      "date": "2024-12-23",
-      "actual": 13228,
-      "predicted": 11671
-    },
-    {
-      "date": "2024-12-24",
-      "actual": 13271,
-      "predicted": 11689
-    },
-    {
-      "date": "2024-12-25",
-      "actual": 13483,
-      "predicted": 11673
-    },
-    {
-      "date": "2024-12-26",
-      "actual": 13382,
-      "predicted": 11739
-    },
-    {
-      "date": "2024-12-27",
-      "actual": 13359,
-      "predicted": 11708
-    },
-    {
-      "date": "2024-12-30",
-      "actual": 13474,
-      "predicted": 11720
-    },
-    {
-      "date": "2024-12-31",
-      "actual": 13555,
-      "predicted": 11786
-    },
-    {
-      "date": "2025-01-02",
-      "actual": 13650,
-      "predicted": 11706
-    },
-    {
-      "date": "2025-01-03",
-      "actual": 13763,
-      "predicted": 11785
-    },
-    {
-      "date": "2025-01-06",
-      "actual": 13571,
-      "predicted": 11796
-    },
-    {
-      "date": "2025-01-07",
-      "actual": 13546,
-      "predicted": 11813
-    },
-    {
-      "date": "2025-01-08",
-      "actual": 13783,
-      "predicted": 11824
-    },
-    {
-      "date": "2025-01-09",
-      "actual": 13797,
-      "predicted": 11831
-    },
-    {
-      "date": "2025-01-10",
-      "actual": 13707,
-      "predicted": 11781
-    },
-    {
-      "date": "2025-01-13",
-      "actual": 13791,
-      "predicted": 11891
-    },
-    {
-      "date": "2025-01-14",
-      "actual": 13751,
-      "predicted": 11954
-    },
-    {
-      "date": "2025-01-15",
-      "actual": 13861,
-      "predicted": 11879
-    },
-    {
-      "date": "2025-01-16",
-      "actual": 13897,
-      "predicted": 11872
-    },
-    {
-      "date": "2025-01-17",
-      "actual": 13943,
-      "predicted": 11746
-    },
-    {
-      "date": "2025-01-20",
-      "actual": 13707,
-      "predicted": 11728
-    },
-    {
-      "date": "2025-01-21",
-      "actual": 13780,
-      "predicted": 11730
-    },
-    {
-      "date": "2025-01-22",
-      "actual": 13849,
-      "predicted": 11745
-    },
-    {
-      "date": "2025-01-23",
-      "actual": 14083,
-      "predicted": 11721
-    },
-    {
-      "date": "2025-01-24",
-      "actual": 13934,
-      "predicted": 11697
-    },
-    {
-      "date": "2025-01-27",
-      "actual": 14155,
-      "predicted": 11710
-    },
-    {
-      "date": "2025-01-28",
-      "actual": 14244,
-      "predicted": 11754
-    },
-    {
-      "date": "2025-01-29",
-      "actual": 14230,
-      "predicted": 11742
-    },
-    {
-      "date": "2025-01-30",
-      "actual": 14013,
-      "predicted": 11768
-    },
-    {
-      "date": "2025-01-31",
-      "actual": 13938,
-      "predicted": 11703
-    },
-    {
-      "date": "2025-02-03",
-      "actual": 14227,
-      "predicted": 11690
-    },
-    {
-      "date": "2025-02-04",
-      "actual": 14211,
-      "predicted": 11700
-    },
-    {
-      "date": "2025-02-05",
-      "actual": 14285,
-      "predicted": 11701
-    },
-    {
-      "date": "2025-02-06",
-      "actual": 14511,
-      "predicted": 11707
-    },
-    {
-      "date": "2025-02-07",
-      "actual": 14184,
-      "predicted": 11709
-    },
-    {
-      "date": "2025-02-10",
-      "actual": 14094,
-      "predicted": 11647
-    },
-    {
-      "date": "2025-02-11",
-      "actual": 14274,
-      "predicted": 11667
-    },
-    {
-      "date": "2025-02-12",
-      "actual": 14260,
-      "predicted": 11735
-    },
-    {
-      "date": "2025-02-13",
-      "actual": 14294,
-      "predicted": 11761
-    },
-    {
-      "date": "2025-02-14",
-      "actual": 14111,
-      "predicted": 11757
-    },
-    {
-      "date": "2025-02-17",
-      "actual": 14158,
-      "predicted": 11773
-    },
-    {
-      "date": "2025-02-18",
-      "actual": 13995,
-      "predicted": 11783
-    },
-    {
-      "date": "2025-02-19",
-      "actual": 13980,
-      "predicted": 11715
-    },
-    {
-      "date": "2025-02-20",
-      "actual": 13797,
-      "predicted": 11750
-    },
-    {
-      "date": "2025-02-21",
-      "actual": 13682,
-      "predicted": 11678
-    },
-    {
-      "date": "2025-02-24",
-      "actual": 14010,
-      "predicted": 11732
-    },
-    {
-      "date": "2025-02-25",
-      "actual": 13967,
-      "predicted": 11736
-    },
-    {
-      "date": "2025-02-26",
-      "actual": 14041,
-      "predicted": 11714
-    },
-    {
-      "date": "2025-02-27",
-      "actual": 13962,
-      "predicted": 11607
-    },
-    {
-      "date": "2025-02-28",
-      "actual": 13832,
-      "predicted": 11594
-    },
-    {
-      "date": "2025-03-03",
-      "actual": 13720,
-      "predicted": 11685
-    },
-    {
-      "date": "2025-03-04",
-      "actual": 13773,
-      "predicted": 11615
-    },
-    {
-      "date": "2025-03-05",
-      "actual": 13989,
-      "predicted": 11701
-    },
-    {
-      "date": "2025-03-06",
-      "actual": 14227,
-      "predicted": 11629
-    },
-    {
-      "date": "2025-03-07",
-      "actual": 14244,
-      "predicted": 11683
-    },
-    {
-      "date": "2025-03-10",
-      "actual": 14333,
-      "predicted": 11639
-    },
-    {
-      "date": "2025-03-11",
-      "actual": 14577,
-      "predicted": 11779
-    },
-    {
-      "date": "2025-03-12",
-      "actual": 14587,
-      "predicted": 11772
-    },
-    {
-      "date": "2025-03-13",
-      "actual": 14513,
-      "predicted": 11815
-    },
-    {
-      "date": "2025-03-14",
-      "actual": 14419,
-      "predicted": 11798
-    },
-    {
-      "date": "2025-03-17",
-      "actual": 14500,
-      "predicted": 11763
-    },
-    {
-      "date": "2025-03-18",
-      "actual": 14657,
-      "predicted": 11757
-    },
-    {
-      "date": "2025-03-19",
-      "actual": 14564,
-      "predicted": 11758
-    },
-    {
-      "date": "2025-03-20",
-      "actual": 14805,
-      "predicted": 11727
-    },
-    {
-      "date": "2025-03-21",
-      "actual": 14969,
-      "predicted": 11712
-    },
-    {
-      "date": "2025-03-24",
-      "actual": 15022,
-      "predicted": 11697
-    },
-    {
-      "date": "2025-03-25",
-      "actual": 15033,
-      "predicted": 11705
-    },
-    {
-      "date": "2025-03-26",
-      "actual": 15121,
-      "predicted": 11737
-    },
-    {
-      "date": "2025-03-27",
-      "actual": 14724,
-      "predicted": 11742
-    },
-    {
-      "date": "2025-03-28",
-      "actual": 14161,
-      "predicted": 11710
-    },
-    {
-      "date": "2025-03-31",
-      "actual": 13800,
-      "predicted": 11680
-    },
-    {
-      "date": "2025-04-01",
-      "actual": 14104,
-      "predicted": 11697
-    },
-    {
-      "date": "2025-04-02",
-      "actual": 14332,
-      "predicted": 11697
-    },
-    {
-      "date": "2025-04-03",
-      "actual": 14952,
-      "predicted": 11708
-    },
-    {
-      "date": "2025-04-04",
-      "actual": 14892,
-      "predicted": 11654
-    },
-    {
       "date": "2025-04-07",
       "actual": 14806,
-      "predicted": 11556
+      "predicted": 13775
     },
     {
       "date": "2025-04-08",
       "actual": 14821,
-      "predicted": 11620
+      "predicted": 13908
     },
     {
       "date": "2025-04-09",
       "actual": 15314,
-      "predicted": 11596
+      "predicted": 14161
     },
     {
       "date": "2025-04-10",
       "actual": 15098,
-      "predicted": 11645
+      "predicted": 14613
     },
     {
       "date": "2025-04-11",
       "actual": 15098,
-      "predicted": 10720
+      "predicted": 14778
     },
     {
       "date": "2025-04-14",
       "actual": 15543,
-      "predicted": 10733
+      "predicted": 14857
     },
     {
       "date": "2025-04-15",
       "actual": 15403,
-      "predicted": 10690
+      "predicted": 14708
     },
     {
       "date": "2025-04-16",
       "actual": 15030,
-      "predicted": 10696
+      "predicted": 15081
     },
     {
       "date": "2025-04-17",
       "actual": 15343,
-      "predicted": 10638
+      "predicted": 15043
     },
     {
       "date": "2025-04-18",
       "actual": 15078,
-      "predicted": 10717
+      "predicted": 14815
     },
     {
       "date": "2025-04-21",
       "actual": 15411,
-      "predicted": 10669
+      "predicted": 15077
     },
     {
       "date": "2025-04-22",
       "actual": 15171,
-      "predicted": 10669
+      "predicted": 15252
     },
     {
       "date": "2025-04-23",
       "actual": 15120,
-      "predicted": 10722
+      "predicted": 14967
     },
     {
       "date": "2025-04-24",
       "actual": 14759,
-      "predicted": 10689
+      "predicted": 14857
     },
     {
       "date": "2025-04-25",
       "actual": 15113,
-      "predicted": 10715
+      "predicted": 15020
     },
     {
       "date": "2025-04-28",
       "actual": 15397,
-      "predicted": 10676
+      "predicted": 14841
     },
     {
       "date": "2025-04-29",
       "actual": 15756,
-      "predicted": 10703
+      "predicted": 14964
     },
     {
       "date": "2025-04-30",
       "actual": 15550,
-      "predicted": 10584
+      "predicted": 14975
     },
     {
       "date": "2025-05-01",
       "actual": 15246,
-      "predicted": 10536
+      "predicted": 14625
     },
     {
       "date": "2025-05-02",
       "actual": 15658,
-      "predicted": 10491
+      "predicted": 14688
     },
     {
       "date": "2025-05-05",
       "actual": 15095,
-      "predicted": 10520
+      "predicted": 15032
     },
     {
       "date": "2025-05-06",
       "actual": 15451,
-      "predicted": 10567
+      "predicted": 15188
     },
     {
       "date": "2025-05-07",
       "actual": 15090,
-      "predicted": 10670
+      "predicted": 15181
     },
     {
       "date": "2025-05-08",
       "actual": 15185,
-      "predicted": 10824
+      "predicted": 15082
     },
     {
       "date": "2025-05-09",
       "actual": 14897,
-      "predicted": 10659
+      "predicted": 15193
     },
     {
       "date": "2025-05-12",
       "actual": 15084,
-      "predicted": 11604
+      "predicted": 14992
     },
     {
       "date": "2025-05-13",
       "actual": 15290,
-      "predicted": 11459
+      "predicted": 14892
     },
     {
       "date": "2025-05-14",
       "actual": 15356,
-      "predicted": 11494
+      "predicted": 14913
     },
     {
       "date": "2025-05-15",
       "actual": 15216,
-      "predicted": 11591
+      "predicted": 14881
     },
     {
       "date": "2025-05-16",
       "actual": 15557,
-      "predicted": 11531
+      "predicted": 14790
     },
     {
       "date": "2025-05-19",
       "actual": 15450,
-      "predicted": 10644
+      "predicted": 14770
     },
     {
       "date": "2025-05-20",
       "actual": 15131,
-      "predicted": 10588
+      "predicted": 15133
     },
     {
       "date": "2025-05-21",
       "actual": 15267,
-      "predicted": 10547
+      "predicted": 14943
     },
     {
       "date": "2025-05-22",
       "actual": 15538,
-      "predicted": 10702
+      "predicted": 15140
     },
     {
       "date": "2025-05-23",
       "actual": 15203,
-      "predicted": 10670
+      "predicted": 15242
     },
     {
       "date": "2025-05-26",
       "actual": 15585,
-      "predicted": 10684
+      "predicted": 15217
+    },
+    {
+      "date": "2025-05-27",
+      "actual": 15344,
+      "predicted": 15231
+    },
+    {
+      "date": "2025-05-28",
+      "actual": 15601,
+      "predicted": 15073
+    },
+    {
+      "date": "2025-05-29",
+      "actual": 15376,
+      "predicted": 15138
+    },
+    {
+      "date": "2025-05-30",
+      "actual": 15334,
+      "predicted": 15152
+    },
+    {
+      "date": "2025-06-02",
+      "actual": 15501,
+      "predicted": 15145
+    },
+    {
+      "date": "2025-06-03",
+      "actual": 15432,
+      "predicted": 15257
+    },
+    {
+      "date": "2025-06-04",
+      "actual": 15466,
+      "predicted": 15227
+    },
+    {
+      "date": "2025-06-05",
+      "actual": 15675,
+      "predicted": 15264
+    },
+    {
+      "date": "2025-06-06",
+      "actual": 15797,
+      "predicted": 15269
+    },
+    {
+      "date": "2025-06-09",
+      "actual": 15734,
+      "predicted": 15305
+    },
+    {
+      "date": "2025-06-10",
+      "actual": 15758,
+      "predicted": 15355
+    },
+    {
+      "date": "2025-06-11",
+      "actual": 15844,
+      "predicted": 15279
+    },
+    {
+      "date": "2025-06-12",
+      "actual": 15798,
+      "predicted": 15459
+    },
+    {
+      "date": "2025-06-13",
+      "actual": 15725,
+      "predicted": 15664
+    },
+    {
+      "date": "2025-06-16",
+      "actual": 15879,
+      "predicted": 15654
+    },
+    {
+      "date": "2025-06-17",
+      "actual": 15564,
+      "predicted": 15751
+    },
+    {
+      "date": "2025-06-18",
+      "actual": 15506,
+      "predicted": 15776
+    },
+    {
+      "date": "2025-06-19",
+      "actual": 15530,
+      "predicted": 15707
+    },
+    {
+      "date": "2025-06-20",
+      "actual": 15229,
+      "predicted": 15655
+    },
+    {
+      "date": "2025-06-23",
+      "actual": 15307,
+      "predicted": 15727
+    },
+    {
+      "date": "2025-06-24",
+      "actual": 15426,
+      "predicted": 15538
+    },
+    {
+      "date": "2025-06-25",
+      "actual": 15436,
+      "predicted": 15448
+    },
+    {
+      "date": "2025-06-26",
+      "actual": 15374,
+      "predicted": 15482
+    },
+    {
+      "date": "2025-06-27",
+      "actual": 15502,
+      "predicted": 15316
+    },
+    {
+      "date": "2025-06-30",
+      "actual": 15480,
+      "predicted": 15172
+    },
+    {
+      "date": "2025-07-01",
+      "actual": 15512,
+      "predicted": 15370
+    },
+    {
+      "date": "2025-07-02",
+      "actual": 15635,
+      "predicted": 15363
+    },
+    {
+      "date": "2025-07-03",
+      "actual": 15584,
+      "predicted": 15389
+    },
+    {
+      "date": "2025-07-04",
+      "actual": 15784,
+      "predicted": 15463
+    },
+    {
+      "date": "2025-07-07",
+      "actual": 15871,
+      "predicted": 15409
+    },
+    {
+      "date": "2025-07-08",
+      "actual": 15822,
+      "predicted": 15492
+    },
+    {
+      "date": "2025-07-09",
+      "actual": 16034,
+      "predicted": 15484
+    },
+    {
+      "date": "2025-07-10",
+      "actual": 15894,
+      "predicted": 15483
+    },
+    {
+      "date": "2025-07-11",
+      "actual": 16002,
+      "predicted": 15548
+    },
+    {
+      "date": "2025-07-14",
+      "actual": 16234,
+      "predicted": 15728
+    },
+    {
+      "date": "2025-07-15",
+      "actual": 16299,
+      "predicted": 15806
+    },
+    {
+      "date": "2025-07-16",
+      "actual": 16018,
+      "predicted": 15857
+    },
+    {
+      "date": "2025-07-17",
+      "actual": 15861,
+      "predicted": 15699
+    },
+    {
+      "date": "2025-07-18",
+      "actual": 15758,
+      "predicted": 15770
+    },
+    {
+      "date": "2025-07-21",
+      "actual": 15726,
+      "predicted": 15860
+    },
+    {
+      "date": "2025-07-22",
+      "actual": 15865,
+      "predicted": 15880
+    },
+    {
+      "date": "2025-07-23",
+      "actual": 15729,
+      "predicted": 15780
+    },
+    {
+      "date": "2025-07-24",
+      "actual": 15800,
+      "predicted": 15751
+    },
+    {
+      "date": "2025-07-25",
+      "actual": 16228,
+      "predicted": 15648
+    },
+    {
+      "date": "2025-07-28",
+      "actual": 15985,
+      "predicted": 15661
+    },
+    {
+      "date": "2025-07-29",
+      "actual": 15961,
+      "predicted": 15689
+    },
+    {
+      "date": "2025-07-30",
+      "actual": 16035,
+      "predicted": 15681
+    },
+    {
+      "date": "2025-07-31",
+      "actual": 16091,
+      "predicted": 15727
+    },
+    {
+      "date": "2025-08-01",
+      "actual": 16236,
+      "predicted": 16004
+    },
+    {
+      "date": "2025-08-04",
+      "actual": 15919,
+      "predicted": 15754
+    },
+    {
+      "date": "2025-08-05",
+      "actual": 15949,
+      "predicted": 15769
+    },
+    {
+      "date": "2025-08-06",
+      "actual": 15956,
+      "predicted": 15821
+    },
+    {
+      "date": "2025-08-07",
+      "actual": 15776,
+      "predicted": 15959
+    },
+    {
+      "date": "2025-08-08",
+      "actual": 15841,
+      "predicted": 16018
+    },
+    {
+      "date": "2025-08-11",
+      "actual": 15774,
+      "predicted": 15878
+    },
+    {
+      "date": "2025-08-12",
+      "actual": 15757,
+      "predicted": 15817
+    },
+    {
+      "date": "2025-08-13",
+      "actual": 15880,
+      "predicted": 15716
+    },
+    {
+      "date": "2025-08-14",
+      "actual": 15805,
+      "predicted": 15674
+    },
+    {
+      "date": "2025-08-15",
+      "actual": 16098,
+      "predicted": 15705
+    },
+    {
+      "date": "2025-08-18",
+      "actual": 15968,
+      "predicted": 15662
+    },
+    {
+      "date": "2025-08-19",
+      "actual": 16105,
+      "predicted": 15748
+    },
+    {
+      "date": "2025-08-20",
+      "actual": 16141,
+      "predicted": 15715
+    },
+    {
+      "date": "2025-08-21",
+      "actual": 16254,
+      "predicted": 15656
+    },
+    {
+      "date": "2025-08-22",
+      "actual": 16394,
+      "predicted": 15725
+    },
+    {
+      "date": "2025-08-25",
+      "actual": 16428,
+      "predicted": 15742
+    },
+    {
+      "date": "2025-08-26",
+      "actual": 16785,
+      "predicted": 15793
+    },
+    {
+      "date": "2025-08-27",
+      "actual": 17161,
+      "predicted": 15915
+    },
+    {
+      "date": "2025-08-28",
+      "actual": 16965,
+      "predicted": 15773
+    },
+    {
+      "date": "2025-08-29",
+      "actual": 17236,
+      "predicted": 15821
+    },
+    {
+      "date": "2025-09-01",
+      "actual": 17351,
+      "predicted": 15931
+    },
+    {
+      "date": "2025-09-02",
+      "actual": 17261,
+      "predicted": 16220
+    },
+    {
+      "date": "2025-09-03",
+      "actual": 17266,
+      "predicted": 16611
+    },
+    {
+      "date": "2025-09-04",
+      "actual": 17227,
+      "predicted": 16659
+    },
+    {
+      "date": "2025-09-05",
+      "actual": 17274,
+      "predicted": 16709
+    },
+    {
+      "date": "2025-09-08",
+      "actual": 17481,
+      "predicted": 16930
+    },
+    {
+      "date": "2025-09-09",
+      "actual": 17482,
+      "predicted": 17059
+    },
+    {
+      "date": "2025-09-10",
+      "actual": 17331,
+      "predicted": 17111
+    },
+    {
+      "date": "2025-09-11",
+      "actual": 17208,
+      "predicted": 16947
+    },
+    {
+      "date": "2025-09-12",
+      "actual": 17464,
+      "predicted": 17062
+    },
+    {
+      "date": "2025-09-15",
+      "actual": 17811,
+      "predicted": 17140
+    },
+    {
+      "date": "2025-09-16",
+      "actual": 17956,
+      "predicted": 17126
+    },
+    {
+      "date": "2025-09-17",
+      "actual": 17712,
+      "predicted": 17201
+    },
+    {
+      "date": "2025-09-18",
+      "actual": 17872,
+      "predicted": 17146
+    },
+    {
+      "date": "2025-09-19",
+      "actual": 18190,
+      "predicted": 17238
     }
   ]
 }
