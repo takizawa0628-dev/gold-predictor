@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-16T03:39:31.593061",
+  "generated_at": "2026-02-17T03:34:29.169774",
   "model": {
     "algorithm": "GradientBoostingRegressor",
     "version": "v3",
@@ -23,7 +23,7 @@
     "rmse": 3.887,
     "mape": 2.93,
     "direction_accuracy": 42.8,
-    "change_rate_mae": 3.011,
+    "change_rate_mae": 3.01,
     "train_samples": 1194,
     "test_samples": 299,
     "n_features": 45

@@ -1,5 +1,5 @@
 Gold Price AI Prediction Report v3
-Generated: 2026-02-16 03:39:31
+Generated: 2026-02-17 03:34:29
 
 Prediction: Y25,118/g -> Y24,657/g (-1.83%)
 Price MAE: Y546/g | MAPE: 2.93% | Direction: 42.8%
