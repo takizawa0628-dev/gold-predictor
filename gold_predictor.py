@@ -1,23 +1,14 @@
 #!/usr/bin/env python3
 """
-====================================================================
-金価格 AI 予測エンジン v3 (Gold Price AI Prediction Engine)
-====================================================================
-多因子分析 × GradientBoosting による日本円建て金価格の5日間予測
-
-改善点 (v3):
-  - 絶対価格ではなく「変化率」を予測（非現実的な予測を防止）
-  - 予測変化率に上限/下限を設定（±10%）
-  - より安定した特徴量設計
-
-使い方:
-  pip install yfinance pandas numpy scikit-learn
-  python gold_predictor.py
-====================================================================
+金価格 AI 予測エンジン v4
+- 田中貴金属の店頭小売価格・買取価格をスクレイピング
+- 変化率予測（GradientBoosting）
+- 円建て予測を田中貴金属ベースで補正
 """
 
 import json
 import warnings
+import re
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -29,38 +20,96 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 warnings.filterwarnings("ignore")
 
-# ====================================================================
-# 設定
-# ====================================================================
 DATA_START = "2020-01-01"
 OUTPUT_FILE = "predictions.json"
 REPORT_FILE = "model_report.txt"
-FORECAST_DAYS = 5
-
-TICKERS = {
-    "Gold_USD":  "GC=F",
-    "USDJPY":    "JPY=X",
-    "Oil":       "CL=F",
-    "SP500":     "^GSPC",
-    "US10Y":     "^TNX",
-    "DXY":       "DX-Y.NYB",
-    "Silver":    "SI=F",
-    "Platinum":  "PL=F",
-    "VIX":       "^VIX",
-    "Nikkei":    "^N225",
-}
-
+FORECAST_DAYS = 1
 MAX_CHANGE_PCT = 10.0
 
+TICKERS = {
+    "Gold_USD": "GC=F", "USDJPY": "JPY=X", "Oil": "CL=F",
+    "SP500": "^GSPC", "US10Y": "^TNX", "DXY": "DX-Y.NYB",
+    "Silver": "SI=F", "Platinum": "PL=F", "VIX": "^VIX", "Nikkei": "^N225",
+}
 
-def print_header(text):
-    print(f"\n{'='*60}")
-    print(f"  {text}")
-    print(f"{'='*60}")
+
+def fetch_tanaka_price():
+    """田中貴金属の最新金価格をスクレイピング"""
+    try:
+        import requests
+        from bs4 import BeautifulSoup
+
+        url = "https://gold.tanaka.co.jp/commodity/souba/d-gold.php"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        }
+        resp = requests.get(url, headers=headers, timeout=15)
+        resp.encoding = "utf-8"
+        soup = BeautifulSoup(resp.text, "html.parser")
+
+        # 最新価格テーブルを探す
+        retail_price = None
+        buy_price = None
+        price_date = None
+
+        # ヘッダーから日付を取得
+        h3_tags = soup.find_all("h3")
+        for h3 in h3_tags:
+            text = h3.get_text()
+            if "地金価格" in text:
+                match = re.search(r"(\d{4})年(\d{2})月(\d{2})日", text)
+                if match:
+                    price_date = f"{match.group(1)}-{match.group(2)}-{match.group(3)}"
+                break
+
+        # テーブルから価格を取得
+        tables = soup.find_all("table")
+        for table in tables:
+            rows = table.find_all("tr")
+            for row in rows:
+                cells = row.find_all(["td", "th"])
+                cell_texts = [c.get_text(strip=True) for c in cells]
+                # 「金」の行を探す
+                for i, ct in enumerate(cell_texts):
+                    if ct == "金" and len(cell_texts) >= i + 3:
+                        # 小売価格を探す
+                        for j in range(i + 1, len(cell_texts)):
+                            price_text = cell_texts[j].replace(",", "").replace("円", "").strip()
+                            # 括弧内の前日比を除去
+                            price_text = re.sub(r'\(.*?\)', '', price_text).strip()
+                            price_text = re.sub(r'[^0-9]', '', price_text)
+                            if price_text and len(price_text) >= 4:
+                                if retail_price is None:
+                                    retail_price = int(price_text[:5] if len(price_text) > 5 else price_text)
+                                elif buy_price is None:
+                                    buy_price = int(price_text[:5] if len(price_text) > 5 else price_text)
+                                    break
+
+        if retail_price and retail_price > 10000:
+            print(f"  ✅ 田中貴金属: 小売 ¥{retail_price:,}/g, 買取 ¥{buy_price:,}/g ({price_date})")
+            return {
+                "retail_price": retail_price,
+                "buy_price": buy_price,
+                "date": price_date,
+                "source": "田中貴金属工業"
+            }
+        else:
+            print(f"  ⚠️ 田中貴金属: 価格取得失敗（パース結果: {retail_price}）")
+            return None
+
+    except Exception as e:
+        print(f"  ⚠️ 田中貴金属スクレイピング失敗: {e}")
+        return None
 
 
 def fetch_data():
-    print_header("Data fetch")
+    print("\n" + "=" * 60)
+    print("  📥 データ取得中...")
+    print("=" * 60)
+
+    # 田中貴金属の価格を取得
+    tanaka = fetch_tanaka_price()
+
     data = {}
     for name, ticker in TICKERS.items():
         try:
@@ -69,29 +118,25 @@ def fetch_data():
                 df.columns = df.columns.get_level_values(0)
             if len(df) > 0:
                 data[name] = df["Close"]
-                print(f"  OK {name:12s} ({ticker:10s}): {len(df):>5} days")
+                print(f"  ✅ {name:12s}: {len(df):>5} 日分")
         except Exception as e:
-            print(f"  NG {name:12s} ({ticker:10s}): {e}")
-    return data
+            print(f"  ❌ {name:12s}: {e}")
+
+    return data, tanaka
 
 
 def build_features(data):
-    print_header("Feature engineering")
-
     df = pd.DataFrame(data)
     df = df.ffill().dropna(subset=["Gold_USD", "USDJPY"])
     df["Gold_JPY_gram"] = df["Gold_USD"] * df["USDJPY"] / 31.1035
 
     for w in [5, 10, 20, 50, 100]:
         df[f"Gold_MA{w}"] = df["Gold_USD"].rolling(w).mean()
-
     for w in [5, 20, 50, 100]:
         ma = df["Gold_USD"].rolling(w).mean()
         df[f"Gold_Dev{w}"] = (df["Gold_USD"] - ma) / ma * 100
-
     for p in [1, 3, 5, 10, 20]:
         df[f"Gold_Ret_{p}d"] = df["Gold_USD"].pct_change(p) * 100
-
     for p in [1, 5, 10, 20]:
         df[f"JPY_Ret_{p}d"] = df["USDJPY"].pct_change(p) * 100
 
@@ -129,10 +174,8 @@ def build_features(data):
     df["DayOfWeek"] = df.index.dayofweek
     df["Month"] = df.index.month
 
-    # Target: N-day forward CHANGE RATE (%)
     future_price = df["Gold_JPY_gram"].shift(-FORECAST_DAYS)
     df["Target"] = (future_price - df["Gold_JPY_gram"]) / df["Gold_JPY_gram"] * 100
-
     df = df.dropna()
 
     exclude = {"Target", "Gold_JPY_gram", "Gold_USD", "USDJPY",
@@ -140,19 +183,13 @@ def build_features(data):
                "Silver", "Platinum", "US10Y"}
     feature_cols = [c for c in df.columns if c not in exclude]
 
-    print(f"  Period: {df.index[0].strftime('%Y-%m-%d')} ~ {df.index[-1].strftime('%Y-%m-%d')}")
-    print(f"  Samples: {len(df):,}")
-    print(f"  Features: {len(feature_cols)}")
-
+    print(f"\n  📊 サンプル数: {len(df):,} | 特徴量数: {len(feature_cols)}")
     return df, feature_cols
 
 
 def train_model(df, feature_cols):
-    print_header("Model training")
-
     X = df[feature_cols]
     y = df["Target"]
-
     split_idx = int(len(df) * 0.8)
     X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
     y_train, y_test = y.iloc[:split_idx], y.iloc[split_idx:]
@@ -166,9 +203,6 @@ def train_model(df, feature_cols):
 
     y_pred_test = np.clip(model.predict(X_test), -MAX_CHANGE_PCT, MAX_CHANGE_PCT)
 
-    mae = mean_absolute_error(y_test, y_pred_test)
-    rmse = np.sqrt(mean_squared_error(y_test, y_pred_test))
-
     actual_dir = np.sign(y_test.values)
     pred_dir = np.sign(y_pred_test)
     direction_acc = np.mean(actual_dir == pred_dir) * 100
@@ -181,44 +215,64 @@ def train_model(df, feature_cols):
 
     metrics = {
         "mae": round(float(price_mae)),
-        "rmse": round(float(rmse), 3),
         "mape": round(float(mape), 2),
         "direction_accuracy": round(float(direction_acc), 1),
-        "change_rate_mae": round(float(mae), 3),
         "train_samples": len(X_train),
         "test_samples": len(X_test),
         "n_features": len(feature_cols),
     }
 
-    print(f"  Price MAE: Y{price_mae:,.0f}/g | MAPE: {mape:.2f}% | Direction: {direction_acc:.1f}%")
+    print(f"  📊 MAE: ¥{price_mae:,.0f}/g | MAPE: {mape:.2f}% | 方向精度: {direction_acc:.1f}%")
 
     importance = pd.Series(model.feature_importances_, index=feature_cols).sort_values(ascending=False)
-
     return model, X, y, X_test, y_test, y_pred_test, metrics, importance, base_prices, pred_prices, actual_prices
 
 
-def make_prediction(model, X, df):
-    print_header("Prediction")
-
+def make_prediction(model, X, df, tanaka):
     latest = X.iloc[-1:]
     pred_chg = np.clip(model.predict(latest)[0], -MAX_CHANGE_PCT, MAX_CHANGE_PCT)
 
-    current_jpy = df["Gold_JPY_gram"].iloc[-1]
-    predicted_jpy = current_jpy * (1 + pred_chg / 100)
+    # Yahoo Finance ベースの価格
+    yf_current_jpy = df["Gold_JPY_gram"].iloc[-1]
+    yf_predicted_jpy = yf_current_jpy * (1 + pred_chg / 100)
+
+    # 田中貴金属ベースの価格（取得できた場合）
+    if tanaka and tanaka.get("retail_price"):
+        tanaka_retail = tanaka["retail_price"]
+        tanaka_buy = tanaka["buy_price"]
+        # 田中貴金属の買取価格をベースに予測
+        tanaka_predicted_buy = round(tanaka_buy * (1 + pred_chg / 100))
+        tanaka_predicted_retail = round(tanaka_retail * (1 + pred_chg / 100))
+    else:
+        tanaka_retail = None
+        tanaka_buy = None
+        tanaka_predicted_buy = None
+        tanaka_predicted_retail = None
 
     prediction = {
         "date": df.index[-1].strftime("%Y-%m-%d"),
-        "forecast_date": (df.index[-1] + timedelta(days=FORECAST_DAYS + 2)).strftime("%Y-%m-%d"),
-        "current_jpy_gram": round(float(current_jpy)),
-        "predicted_jpy_gram": round(float(predicted_jpy)),
+        "forecast_date": (df.index[-1] + timedelta(days=1)).strftime("%Y-%m-%d"),
+        "current_jpy_gram": round(float(yf_current_jpy)),
+        "predicted_jpy_gram": round(float(yf_predicted_jpy)),
         "change_pct": round(float(pred_chg), 2),
         "current_usd_oz": round(float(df["Gold_USD"].iloc[-1]), 2),
         "current_usdjpy": round(float(df["USDJPY"].iloc[-1]), 2),
         "direction": "up" if pred_chg > 0 else "down",
+        # 田中貴金属ベース
+        "tanaka_retail_current": tanaka_retail,
+        "tanaka_buy_current": tanaka_buy,
+        "tanaka_retail_predicted": tanaka_predicted_retail,
+        "tanaka_buy_predicted": tanaka_predicted_buy,
+        "tanaka_date": tanaka["date"] if tanaka else None,
+        "tanaka_source": "田中貴金属工業 店頭価格（税込）",
     }
 
     arrow = "▲" if pred_chg >= 0 else "▼"
-    print(f"  Current: Y{current_jpy:,.0f}/g -> Predicted: Y{predicted_jpy:,.0f}/g ({arrow}{abs(pred_chg):.2f}%)")
+    print(f"\n  🔮 予測結果:")
+    if tanaka_buy:
+        print(f"     田中貴金属 買取: ¥{tanaka_buy:,}/g → 予測: ¥{tanaka_predicted_buy:,}/g ({arrow}{abs(pred_chg):.2f}%)")
+        print(f"     田中貴金属 小売: ¥{tanaka_retail:,}/g → 予測: ¥{tanaka_predicted_retail:,}/g")
+    print(f"     国際価格換算:   ¥{yf_current_jpy:,.0f}/g → 予測: ¥{yf_predicted_jpy:,.0f}/g")
 
     return prediction
 
@@ -280,11 +334,9 @@ def export_json(df, X, model, prediction, metrics, importance,
         "generated_at": datetime.now().isoformat(),
         "model": {
             "algorithm": "GradientBoostingRegressor",
-            "version": "v3",
+            "version": "v4 (田中貴金属対応)",
             "n_estimators": 500,
             "forecast_days": FORECAST_DAYS,
-            "data_start": DATA_START,
-            "max_change_pct": MAX_CHANGE_PCT,
         },
         "prediction": prediction,
         "metrics": metrics,
@@ -295,44 +347,45 @@ def export_json(df, X, model, prediction, metrics, importance,
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
-
-    print(f"  Saved: {OUTPUT_FILE} ({len(chart_data)} chart days, {len(feature_data)} features)")
+    print(f"  💾 {OUTPUT_FILE} 保存完了")
 
 
 def write_report(prediction, metrics, importance):
-    report = f"""Gold Price AI Prediction Report v3
+    report = f"""Gold Price AI Prediction Report v4 (Tanaka Kikinzoku)
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-Prediction: Y{prediction['current_jpy_gram']:,}/g -> Y{prediction['predicted_jpy_gram']:,}/g ({prediction['change_pct']:+.2f}%)
-Price MAE: Y{metrics['mae']:,}/g | MAPE: {metrics['mape']}% | Direction: {metrics['direction_accuracy']}%
+Tanaka Buy: Y{prediction.get('tanaka_buy_current', 'N/A'):,}/g -> Y{prediction.get('tanaka_buy_predicted', 'N/A'):,}/g ({prediction['change_pct']:+.2f}%)
+International: Y{prediction['current_jpy_gram']:,}/g -> Y{prediction['predicted_jpy_gram']:,}/g
+MAE: Y{metrics['mae']:,}/g | MAPE: {metrics['mape']}% | Direction: {metrics['direction_accuracy']}%
 
 Top Features:
 """
     for i, (feat, imp) in enumerate(importance.head(15).items(), 1):
         report += f"  {i:2d}. {feat:30s} {imp*100:.2f}%\n"
-    report += "\nDisclaimer: For educational purposes only. Not investment advice.\n"
+    report += "\nDisclaimer: For educational purposes only.\n"
 
     with open(REPORT_FILE, "w", encoding="utf-8") as f:
         f.write(report)
 
 
 def main():
-    print("\n Gold Price AI Prediction Engine v3\n")
-    data = fetch_data()
+    print("\n🏆 金価格 AI 予測エンジン v4 (田中貴金属対応)\n")
+
+    data, tanaka = fetch_data()
 
     if "Gold_USD" not in data or "USDJPY" not in data:
-        print("ERROR: Required data not available.")
+        print("❌ 必須データ取得失敗")
         return
 
     df, feature_cols = build_features(data)
     result = train_model(df, feature_cols)
     model, X, y, X_test, y_test, y_pred_test, metrics, importance, bp, pp, ap = result
 
-    prediction = make_prediction(model, X, df)
+    prediction = make_prediction(model, X, df, tanaka)
     export_json(df, X, model, prediction, metrics, importance, y_test, y_pred_test, bp, pp, ap)
     write_report(prediction, metrics, importance)
 
-    print(f"\n  Done! Open index.html to view results.\n")
+    print(f"\n  ✅ 完了！\n")
 
 
 if __name__ == "__main__":
