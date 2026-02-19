@@ -1,24 +1,24 @@
 Gold Price AI Prediction Report v3
-Generated: 2026-02-18 03:36:29
+Generated: 2026-02-19 03:35:19
 
-Prediction: Y25,189/g -> Y24,485/g (-2.80%)
-Price MAE: Y584/g | MAPE: 3.12% | Direction: 40.8%
+Prediction: Y24,263/g -> Y23,780/g (-1.99%)
+Price MAE: Y617/g | MAPE: 3.27% | Direction: 40.1%
 
 Top Features:
-   1. US10Y_Level                    6.13%
-   2. Gold_Silver_Ratio              5.82%
-   3. Gold_MA20                      4.86%
-   4. Gold_MA10                      4.83%
-   5. Gold_MA100                     3.78%
-   6. Volatility                     3.70%
-   7. DXY_Ret_20d                    3.49%
-   8. MACD_Signal                    3.38%
-   9. Gold_MA50                      3.34%
-  10. Nikkei_Ret_20d                 3.21%
-  11. JPY_Ret_10d                    3.14%
-  12. Gold_Ret_20d                   3.08%
-  13. SP500_Ret_20d                  2.80%
-  14. Oil_Ret_20d                    2.68%
-  15. VIX_Ret_20d                    2.65%
+   1. Gold_Silver_Ratio              6.22%
+   2. US10Y_Level                    5.76%
+   3. Gold_MA10                      5.16%
+   4. Volatility                     4.48%
+   5. Gold_MA20                      4.20%
+   6. Gold_MA100                     3.58%
+   7. Gold_MA50                      3.42%
+   8. DXY_Ret_20d                    3.36%
+   9. JPY_Ret_20d                    3.14%
+  10. JPY_Ret_10d                    3.08%
+  11. DXY_Ret_1d                     3.01%
+  12. Nikkei_Ret_20d                 3.00%
+  13. MACD_Signal                    2.91%
+  14. Oil_Ret_20d                    2.87%
+  15. Gold_Ret_20d                   2.73%
 
 Disclaimer: For educational purposes only. Not investment advice.
