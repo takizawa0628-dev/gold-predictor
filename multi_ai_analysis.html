@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マルチAI分析ツール</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08080c;--bg2:#0e0e14;--card:rgba(255,255,255,0.025);
+  --border:rgba(255,255,255,0.06);--text:#d4d4d8;--dim:#71717a;--muted:#52525b;
+  --chatgpt:#10a37f;--claude:#d97706;--gemini:#4285f4;--deepseek:#5b6ee1;--grok:#ef4444;
+  --gold:#c9a84c;--gold-light:#e8d48b;--gold-dim:rgba(201,168,76,0.12);
+  --border-gold:rgba(201,168,76,0.22);
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans','Noto Sans JP',sans-serif;min-height:100vh;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse at 20% 10%,rgba(66,133,244,0.03) 0%,transparent 50%),
+  radial-gradient(ellipse at 80% 90%,rgba(201,168,76,0.025) 0%,transparent 50%);
+  pointer-events:none;z-index:0}
+.app{max-width:1100px;margin:0 auto;padding:24px 16px;position:relative;z-index:1}
+
+/* Header */
+.hdr{text-align:center;margin-bottom:32px}
+.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:100px;padding:5px 16px;margin-bottom:12px}
+.hdr h1{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,42px);font-weight:700;background:linear-gradient(135deg,#4285f4,#10a37f,#d97706,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;margin-bottom:6px}
+.hdr p{color:var(--dim);font-size:13px;font-weight:300}
+
+/* AI Icons Row */
+.ai-row{display:flex;justify-content:center;gap:16px;margin:18px 0 24px;flex-wrap:wrap}
+.ai-icon{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;border:1px solid var(--border);font-size:12px;font-weight:500;transition:.3s}
+.ai-icon.active{border-color:currentColor;background:rgba(255,255,255,.03)}
+.ai-icon.available::after{content:'✓';font-size:9px;margin-left:2px;opacity:.6}
+.ai-icon.unavailable{opacity:.35}
+
+/* Tabs */
+.tabs{display:flex;justify-content:center;gap:4px;margin-bottom:24px;flex-wrap:wrap}
+.tab{padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:0;color:var(--dim);font:500 13px 'DM Sans','Noto Sans JP',sans-serif;cursor:pointer;transition:.25s}
+.tab:hover{background:rgba(255,255,255,.035);color:var(--text)}
+.tab.on{background:var(--gold-dim);border-color:var(--border-gold);color:var(--gold);font-weight:600}
+
+/* Tab Content */
+.tc{display:none}.tc.on{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px;transition:border-color .3s}
+.card:hover{border-color:rgba(255,255,255,.1)}
+.card-t{font-size:12px;color:var(--dim);font-weight:500;margin-bottom:14px;letter-spacing:.5px}
+
+/* Input Section */
+.input-section{max-width:700px;margin:0 auto}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:12px;color:var(--dim);font-weight:600;margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase}
+.form-group input,.form-group textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);font:400 14px 'DM Sans','Noto Sans JP',sans-serif;outline:none;transition:.3s;resize:vertical}
+.form-group input:focus,.form-group textarea:focus{border-color:rgba(201,168,76,.4);background:rgba(255,255,255,.05)}
+.form-group textarea{min-height:120px;line-height:1.7}
+.form-group .hint{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* AI Selector */
+.ai-selector{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.ai-check{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-size:12px;font-weight:500;transition:.2s;user-select:none}
+.ai-check:hover{background:rgba(255,255,255,.03)}
+.ai-check.checked{border-color:currentColor;background:rgba(255,255,255,.04)}
+.ai-check input{display:none}
+
+/* Submit Button */
+.btn-submit{display:block;width:100%;padding:14px;border-radius:12px;border:1px solid var(--border-gold);background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));color:var(--gold);font:600 14px 'DM Sans','Noto Sans JP',sans-serif;cursor:pointer;transition:.3s;letter-spacing:1px}
+.btn-submit:hover{background:linear-gradient(135deg,rgba(201,168,76,.25),rgba(201,168,76,.1));transform:translateY(-1px)}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* Phase Section */
+.phase{margin-bottom:32px}
+.phase-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.phase-num{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font:700 15px 'JetBrains Mono',monospace;background:var(--gold-dim);color:var(--gold);border:1px solid var(--border-gold);flex-shrink:0}
+.phase-info h3{font-size:16px;font-weight:600;color:var(--text)}
+.phase-info p{font-size:12px;color:var(--muted)}
+
+/* AI Response Card */
+.ai-card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:.3s}
+.ai-card:hover{border-color:rgba(255,255,255,.12)}
+.ai-card-header{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;user-select:none}
+.ai-card-header .ai-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ai-card-header .ai-name{font-weight:600;font-size:14px;flex:1}
+.ai-card-header .ai-model{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.ai-card-header .toggle{font-size:12px;color:var(--muted);transition:.3s}
+.ai-card.open .toggle{transform:rotate(180deg)}
+.ai-card-body{padding:0 18px 18px;display:none;animation:fadeIn .3s ease}
+.ai-card.open .ai-card-body{display:block}
+.ai-card-body .content{font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap;word-wrap:break-word}
+.ai-card-body .content h2,.ai-card-body .content h3{color:var(--gold);font-size:14px;margin:14px 0 6px}
+.ai-card-body .content strong{color:var(--gold-light)}
+.ai-card-body .timestamp{font-size:10px;color:var(--muted);margin-top:12px;font-family:'JetBrains Mono',monospace}
+
+/* Proposal Grid */
+.proposal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.proposal-card{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--border);transition:.3s}
+.proposal-card:hover{border-color:rgba(255,255,255,.12);transform:translateY(-2px)}
+.proposal-card .p-header{padding:16px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.proposal-card .p-header .ai-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.proposal-card .p-header .ai-name{font-weight:600;font-size:14px}
+.proposal-card .p-body{padding:14px 18px 18px;font-size:12px;line-height:1.8;color:var(--dim);max-height:400px;overflow-y:auto;white-space:pre-wrap;word-wrap:break-word}
+.proposal-card .p-body::-webkit-scrollbar{width:4px}
+.proposal-card .p-body::-webkit-scrollbar-track{background:transparent}
+.proposal-card .p-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+
+/* Status / Progress */
+.progress-bar{width:100%;height:4px;background:rgba(255,255,255,.05);border-radius:4px;margin:16px 0;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--chatgpt),var(--claude),var(--gemini),var(--deepseek),var(--grok));border-radius:4px;transition:width .5s ease;width:0}
+.status-msg{font-size:12px;color:var(--dim);text-align:center;margin:8px 0}
+
+/* Empty State */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .icon{font-size:48px;margin-bottom:16px;opacity:.5}
+.empty p{font-size:13px;line-height:1.8}
+
+/* Warn */
+.warn{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.12);border-radius:12px;padding:14px;font-size:11px;color:#fca5a5;line-height:1.7;margin-top:14px}
+.warn strong{color:#f87171}
+
+/* Setup Info */
+.setup{background:rgba(201,168,76,.04);border:1px solid var(--border-gold);border-radius:14px;padding:18px;margin-bottom:14px}
+.setup h3{color:var(--gold);font-size:14px;margin-bottom:10px}
+.setup p{font-size:12px;color:var(--dim);line-height:1.8}
+.setup code{font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(0,0,0,.4);padding:2px 6px;border-radius:4px;color:var(--gold-light)}
+
+/* Link back */
+.nav-link{display:inline-block;font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:4px 12px;border-radius:6px;margin-bottom:12px;transition:.2s}
+.nav-link:hover{color:var(--text);border-color:rgba(255,255,255,.15)}
+
+/* Footer */
+.footer{text-align:center;margin-top:32px;padding-top:18px;border-top:1px solid var(--border)}
+.footer p{font-size:10px;color:var(--muted)}
+
+/* Demo banner */
+.demo-banner{background:rgba(201,168,76,.08);border:1px solid var(--border-gold);border-radius:10px;padding:10px 16px;text-align:center;font-size:12px;color:var(--gold);margin-bottom:18px}
+
+/* Responsive */
+@media(max-width:600px){
+  .proposal-grid{grid-template-columns:1fr}
+  .ai-row{gap:8px}
+  .ai-icon{padding:5px 10px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <a href="index.html" class="nav-link">← 金価格ダッシュボード</a>
+
+  <div class="hdr">
+    <div class="badge">Multi-AI Analysis Engine</div>
+    <h1>マルチAI分析ツール</h1>
+    <p>5つのAIが議題を分析・討論し、各自の提案を提出</p>
+  </div>
+
+  <div class="ai-row" id="aiStatusRow"></div>
+
+  <div class="tabs" id="tabBar">
+    <button class="tab on" data-tab="input">📝 入力</button>
+    <button class="tab" data-tab="analysis">📋 分析</button>
+    <button class="tab" data-tab="discussion">💬 討論</button>
+    <button class="tab" data-tab="proposals">🎯 提案</button>
+    <button class="tab" data-tab="setup">⚙️ セットアップ</button>
+  </div>
+
+  <!-- ==================== INPUT ==================== -->
+  <div class="tc on" id="tc-input">
+    <div class="input-section">
+      <div class="card">
+        <div class="card-t">議題と背景を入力</div>
+        <div class="form-group">
+          <label>議題 (Topic)</label>
+          <input type="text" id="inputTopic" placeholder="例: 新規事業としてAIチャットボットサービスを立ち上げるべきか">
+          <div class="hint">解決したい課題や検討したいテーマを具体的に入力してください</div>
+        </div>
+        <div class="form-group">
+          <label>背景・コンテキスト (Background)</label>
+          <textarea id="inputBackground" placeholder="例: 当社はBtoB SaaS企業で、従業員300名。主力製品は顧客管理システム。近年、顧客からAI機能の要望が増加しており、競合他社もAI機能を次々と追加している。開発リソースは限られているが、経営陣はAI投資に前向き。"></textarea>
+          <div class="hint">関連する状況、制約、目標などの背景情報を入力してください</div>
+        </div>
+        <div class="form-group">
+          <label>使用するAI</label>
+          <div class="ai-selector" id="aiSelector"></div>
+        </div>
+        <button class="btn-submit" id="btnAnalyze" onclick="startAnalysis()">
+          🤖 分析を開始
+        </button>
+        <div class="progress-bar" id="progressBar" style="display:none">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="status-msg" id="statusMsg"></div>
+      </div>
+
+      <div class="demo-banner" id="demoBanner" style="display:none">
+        📊 保存済みの分析結果を表示しています。新しい分析を実行するにはPythonスクリプトを使用してください。
+      </div>
+
+      <div class="warn">
+        <strong>💡 使い方</strong><br>
+        • <strong>Pythonスクリプト:</strong> <code style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(0,0,0,.4);padding:2px 6px;border-radius:4px;color:#fca5a5">python multi_ai_analyzer.py --topic "議題" --background "背景"</code><br>
+        • <strong>ブラウザ:</strong> APIキーを環境変数に設定してこのページから直接分析（対応準備中）<br>
+        • 結果は <code style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(0,0,0,.4);padding:2px 6px;border-radius:4px;color:#fca5a5">analysis_result.json</code> に保存され、このページで自動的に表示されます
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ANALYSIS ==================== -->
+  <div class="tc" id="tc-analysis">
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">1</div>
+        <div class="phase-info">
+          <h3>個別分析</h3>
+          <p>各AIが独立して議題を分析</p>
+        </div>
+      </div>
+      <div id="analysisCards">
+        <div class="empty"><div class="icon">📋</div><p>まだ分析データがありません。<br>「入力」タブから分析を開始するか、<br>Pythonスクリプトで生成してください。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DISCUSSION ==================== -->
+  <div class="tc" id="tc-discussion">
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">2</div>
+        <div class="phase-info">
+          <h3>相互討論</h3>
+          <p>他のAIの分析を踏まえた建設的な議論</p>
+        </div>
+      </div>
+      <div id="discussionCards">
+        <div class="empty"><div class="icon">💬</div><p>まだ討論データがありません。<br>Phase 1 の分析完了後に討論が生成されます。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PROPOSALS ==================== -->
+  <div class="tc" id="tc-proposals">
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">3</div>
+        <div class="phase-info">
+          <h3>最終提案</h3>
+          <p>分析と討論を踏まえた各AIの提案</p>
+        </div>
+      </div>
+      <div id="proposalTopic" style="display:none">
+        <div class="card" style="background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(66,133,244,.04));border-color:var(--border-gold)">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">議題</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text)" id="proposalTopicText"></div>
+        </div>
+      </div>
+      <div class="proposal-grid" id="proposalGrid">
+        <div class="empty" style="grid-column:1/-1"><div class="icon">🎯</div><p>まだ提案データがありません。<br>Phase 1・2 完了後に最終提案が生成されます。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SETUP ==================== -->
+  <div class="tc" id="tc-setup">
+    <div class="setup">
+      <h3>⚙️ セットアップ手順</h3>
+      <p>
+        <strong style="color:var(--gold)">Step 1:</strong> 使用するAIのAPIキーを環境変数に設定<br>
+        <code>export OPENAI_API_KEY="sk-..."</code> &nbsp; (ChatGPT)<br>
+        <code>export ANTHROPIC_API_KEY="sk-ant-..."</code> &nbsp; (Claude)<br>
+        <code>export GOOGLE_API_KEY="AI..."</code> &nbsp; (Gemini)<br>
+        <code>export DEEPSEEK_API_KEY="sk-..."</code> &nbsp; (DeepSeek)<br>
+        <code>export XAI_API_KEY="xai-..."</code> &nbsp; (Grok)<br><br>
+        <strong style="color:var(--gold)">Step 2:</strong> Pythonスクリプトを実行<br>
+        <code>python multi_ai_analyzer.py -t "議題" -b "背景情報"</code><br><br>
+        <strong style="color:var(--gold)">Step 3:</strong> このHTMLで結果を表示<br>
+        <code>analysis_result.json</code> が同じフォルダにあれば自動読み込み<br><br>
+        <strong style="color:var(--gold)">オプション:</strong> 特定のAIだけ使用<br>
+        <code>python multi_ai_analyzer.py -t "議題" -b "背景" --ais chatgpt claude gemini</code>
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-t">🔑 対応AIサービスとAPIキー</div>
+      <div id="apiKeyStatus"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-t">📁 ファイル構成</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);line-height:2;padding:8px;background:rgba(0,0,0,.3);border-radius:8px">
+        📂 gold-predictor/<br>
+        ├── 📄 multi_ai_analysis.html &nbsp;<span style="color:var(--gold)">← このファイル (フロントエンド)</span><br>
+        ├── 🐍 multi_ai_analyzer.py &nbsp;&nbsp;<span style="color:var(--gold)">← 分析エンジン (バックエンド)</span><br>
+        ├── 📊 analysis_result.json &nbsp;&nbsp;<span style="color:var(--gemini)">← 自動生成される結果</span><br>
+        ├── 📄 index.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--dim)">← 金価格ダッシュボード</span><br>
+        └── 🐍 gold_predictor.py &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--dim)">← 金価格予測エンジン</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-t">🔄 分析フロー</div>
+      <div style="font-size:12px;color:var(--dim);line-height:2">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="background:var(--gold-dim);color:var(--gold);padding:3px 10px;border-radius:6px;font-weight:600;font-size:11px">Phase 1</span>
+          <span>個別分析 — 各AIが独立して議題を分析</span>
+        </div>
+        <div style="text-align:center;color:var(--muted);font-size:16px">↓</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="background:rgba(66,133,244,.12);color:var(--gemini);padding:3px 10px;border-radius:6px;font-weight:600;font-size:11px">Phase 2</span>
+          <span>相互討論 — 他AIの分析を読んで討論</span>
+        </div>
+        <div style="text-align:center;color:var(--muted);font-size:16px">↓</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="background:rgba(239,68,68,.12);color:var(--grok);padding:3px 10px;border-radius:6px;font-weight:600;font-size:11px">Phase 3</span>
+          <span>最終提案 — 討論を踏まえた各AIの提案</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Multi-AI Analysis Tool ｜ 5 AI × 3-Phase Discussion Framework</p>
+    <p style="margin-top:4px">ChatGPT · Claude · Gemini · DeepSeek · Grok</p>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// AI Profiles
+// ============================================================
+const AI_PROFILES = {
+  chatgpt:  { id:'chatgpt',  name:'ChatGPT',  color:'#10a37f', icon:'🟢', model:'GPT-4o',          env:'OPENAI_API_KEY' },
+  claude:   { id:'claude',   name:'Claude',    color:'#d97706', icon:'🟠', model:'Claude Sonnet',   env:'ANTHROPIC_API_KEY' },
+  gemini:   { id:'gemini',   name:'Gemini',    color:'#4285f4', icon:'🔵', model:'Gemini 2.0 Flash',env:'GOOGLE_API_KEY' },
+  deepseek: { id:'deepseek', name:'DeepSeek',  color:'#5b6ee1', icon:'🟣', model:'DeepSeek Chat',   env:'DEEPSEEK_API_KEY' },
+  grok:     { id:'grok',     name:'Grok',      color:'#ef4444', icon:'🔴', model:'Grok-2',          env:'XAI_API_KEY' },
+};
+
+let DATA = null;
+
+// ============================================================
+// Init
+// ============================================================
+function init() {
+  renderAIStatusRow();
+  renderAISelector();
+  renderAPIKeyStatus();
+  loadSavedResults();
+}
+
+function renderAIStatusRow() {
+  const row = document.getElementById('aiStatusRow');
+  row.innerHTML = Object.values(AI_PROFILES).map(ai => `
+    <div class="ai-icon" style="color:${ai.color}" id="aiStatus_${ai.id}">
+      ${ai.icon} ${ai.name}
+    </div>
+  `).join('');
+}
+
+function renderAISelector() {
+  const sel = document.getElementById('aiSelector');
+  sel.innerHTML = Object.values(AI_PROFILES).map(ai => `
+    <label class="ai-check checked" style="color:${ai.color}" id="aiCheck_${ai.id}"
+           onclick="toggleAI('${ai.id}')">
+      <input type="checkbox" checked value="${ai.id}">
+      ${ai.icon} ${ai.name}
+    </label>
+  `).join('');
+}
+
+function renderAPIKeyStatus() {
+  const container = document.getElementById('apiKeyStatus');
+  container.innerHTML = Object.values(AI_PROFILES).map(ai => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="color:${ai.color}">${ai.icon}</span>
+        <span style="font-weight:600">${ai.name}</span>
+        <span style="color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px">${ai.model}</span>
+      </div>
+      <code style="font-family:'JetBrains Mono',monospace;font-size:10px;background:rgba(0,0,0,.3);padding:2px 8px;border-radius:4px;color:var(--dim)">${ai.env}</code>
+    </div>
+  `).join('');
+}
+
+function toggleAI(id) {
+  const el = document.getElementById(`aiCheck_${id}`);
+  const input = el.querySelector('input');
+  input.checked = !input.checked;
+  el.classList.toggle('checked', input.checked);
+}
+
+// ============================================================
+// Load saved results
+// ============================================================
+async function loadSavedResults() {
+  try {
+    const res = await fetch('analysis_result.json');
+    if (!res.ok) return;
+    DATA = await res.json();
+    document.getElementById('demoBanner').style.display = '';
+
+    // Fill input fields
+    if (DATA.topic) document.getElementById('inputTopic').value = DATA.topic;
+    if (DATA.background) document.getElementById('inputBackground').value = DATA.background;
+
+    // Update AI status
+    if (DATA.ai_profiles) {
+      for (const [id, info] of Object.entries(DATA.ai_profiles)) {
+        const el = document.getElementById(`aiStatus_${id}`);
+        if (el) {
+          el.classList.add(info.available ? 'available' : 'unavailable');
+          if (info.available) el.classList.add('active');
+        }
+      }
+    }
+
+    renderResults();
+  } catch (e) {
+    console.log('No saved results found');
+  }
+}
+
+// ============================================================
+// Render Results
+// ============================================================
+function renderResults() {
+  if (!DATA || !DATA.phases) return;
+  renderAnalysis(DATA.phases.analysis);
+  renderDiscussion(DATA.phases.discussion);
+  renderProposals(DATA.phases.proposals);
+}
+
+function formatContent(text) {
+  if (!text) return '';
+  // Basic markdown-like formatting
+  return text
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+function createAICard(aiId, data, defaultOpen) {
+  const profile = AI_PROFILES[aiId];
+  if (!profile || !data) return '';
+  const openClass = defaultOpen ? ' open' : '';
+  return `
+    <div class="ai-card${openClass}" id="card_${aiId}_${Math.random().toString(36).slice(2,6)}">
+      <div class="ai-card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="ai-dot" style="background:${profile.color}"></div>
+        <div class="ai-name" style="color:${profile.color}">${profile.icon} ${profile.name}</div>
+        <div class="ai-model">${profile.model}</div>
+        <div class="toggle">▼</div>
+      </div>
+      <div class="ai-card-body">
+        <div class="content">${formatContent(data.content)}</div>
+        ${data.timestamp ? `<div class="timestamp">${new Date(data.timestamp).toLocaleString('ja-JP')}</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function renderAnalysis(analysis) {
+  const container = document.getElementById('analysisCards');
+  if (!analysis || Object.keys(analysis).length === 0) return;
+
+  container.innerHTML = Object.entries(analysis)
+    .map(([aiId, data], i) => createAICard(aiId, data, i === 0))
+    .join('');
+}
+
+function renderDiscussion(discussion) {
+  const container = document.getElementById('discussionCards');
+  if (!discussion || Object.keys(discussion).length === 0) return;
+
+  container.innerHTML = Object.entries(discussion)
+    .map(([aiId, data], i) => createAICard(aiId, data, i === 0))
+    .join('');
+}
+
+function renderProposals(proposals) {
+  const grid = document.getElementById('proposalGrid');
+  if (!proposals || Object.keys(proposals).length === 0) return;
+
+  // Show topic
+  if (DATA.topic) {
+    document.getElementById('proposalTopic').style.display = '';
+    document.getElementById('proposalTopicText').textContent = DATA.topic;
+  }
+
+  grid.innerHTML = Object.entries(proposals).map(([aiId, data]) => {
+    const profile = AI_PROFILES[aiId];
+    if (!profile) return '';
+    return `
+      <div class="proposal-card">
+        <div class="p-header">
+          <div class="ai-dot" style="background:${profile.color}"></div>
+          <div class="ai-name" style="color:${profile.color}">${profile.icon} ${profile.name}</div>
+        </div>
+        <div class="p-body">${formatContent(data.content)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// Start Analysis (placeholder for future browser-based API calls)
+// ============================================================
+function startAnalysis() {
+  const topic = document.getElementById('inputTopic').value.trim();
+  const bg = document.getElementById('inputBackground').value.trim();
+
+  if (!topic) {
+    alert('議題を入力してください');
+    return;
+  }
+  if (!bg) {
+    alert('背景情報を入力してください');
+    return;
+  }
+
+  // Show instructions for using the Python script
+  const selectedAIs = Array.from(document.querySelectorAll('#aiSelector input:checked'))
+    .map(i => i.value).join(' ');
+
+  const cmd = `python multi_ai_analyzer.py -t "${topic}" -b "${bg}" --ais ${selectedAIs}`;
+
+  document.getElementById('statusMsg').innerHTML = `
+    <div style="text-align:left;background:rgba(0,0,0,.3);padding:14px;border-radius:10px;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px">
+      <div style="color:var(--gold);margin-bottom:6px">以下のコマンドを実行してください:</div>
+      <div style="color:var(--text);user-select:all;word-break:break-all">${cmd}</div>
+      <div style="color:var(--muted);margin-top:8px;font-family:'DM Sans',sans-serif">
+        実行後、このページをリロードすると結果が表示されます。
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// Tab Switching
+// ============================================================
+document.getElementById('tabBar').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  const tab = btn.dataset.tab;
+
+  document.querySelectorAll('.tc').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('on'));
+  document.getElementById(`tc-${tab}`).classList.add('on');
+  btn.classList.add('on');
+});
+
+// ============================================================
+// Boot
+// ============================================================
+init();
+</script>
+</body>
+</html>
