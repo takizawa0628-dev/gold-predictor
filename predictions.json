@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-02T03:29:09.571828",
+  "generated_at": "2026-03-03T03:32:31.627202",
   "model": {
     "algorithm": "GradientBoostingRegressor",
     "version": "v4 (田中貴金属対応)",
@@ -7,23 +7,23 @@
     "forecast_days": 1
   },
   "prediction": {
-    "date": "2026-03-01",
-    "forecast_date": "2026-03-02",
-    "current_jpy_gram": 26899,
-    "predicted_jpy_gram": 26073,
-    "change_pct": -3.07,
-    "current_usd_oz": 5368.1,
-    "current_usdjpy": 155.86,
+    "date": "2026-03-02",
+    "forecast_date": "2026-03-03",
+    "current_jpy_gram": 27098,
+    "predicted_jpy_gram": 26273,
+    "change_pct": -3.04,
+    "current_usd_oz": 5381.1,
+    "current_usdjpy": 156.63,
     "direction": "down",
-    "tanaka_retail_current": 29865,
-    "tanaka_buy_current": 1131,
-    "tanaka_retail_predicted": 28948,
-    "tanaka_buy_predicted": 1096,
-    "tanaka_date": "2026-03-02",
+    "tanaka_retail_current": 29969,
+    "tanaka_buy_current": 29612,
+    "tanaka_retail_predicted": 29057,
+    "tanaka_buy_predicted": 28710,
+    "tanaka_date": "2026-03-03",
     "tanaka_source": "田中貴金属工業 店頭価格（税込）"
   },
   "metrics": {
-    "mae": 284,
+    "mae": 285,
     "mape": 1.47,
     "direction_accuracy": 50.3,
     "train_samples": 1205,
@@ -2227,11 +2227,11 @@
       "usdjpy": 155.86
     },
     {
-      "date": "2026-03-01",
-      "actual": 26899,
-      "predicted": 26073,
-      "gold_usd": 5368.1,
-      "usdjpy": 155.86
+      "date": "2026-03-02",
+      "actual": 27098,
+      "predicted": 26273,
+      "gold_usd": 5381.1,
+      "usdjpy": 156.63
     }
   ],
   "test_data": [
