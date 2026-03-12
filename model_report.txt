@@ -1,25 +1,25 @@
 Gold Price AI Prediction Report v4 (Tanaka Kikinzoku)
-Generated: 2026-03-11 03:25:00
+Generated: 2026-03-12 03:31:05
 
-Tanaka Buy: Y28,985/g -> Y28,427/g (-1.92%)
-International: Y26,500/g -> Y25,990/g
-MAE: Y281/g | MAPE: 1.45% | Direction: 50.2%
+Tanaka Buy: Y28,874/g -> Y28,914/g (+0.14%)
+International: Y26,226/g -> Y26,262/g
+MAE: Y277/g | MAPE: 1.43% | Direction: 50.8%
 
 Top Features:
-   1. DXY_Ret_1d                     10.09%
-   2. Gold_Ret_1d                    5.53%
-   3. VIX_Ret_1d                     4.64%
-   4. Gold_Silver_Ratio              3.59%
-   5. SP500_Ret_20d                  3.49%
-   6. SP500_Ret_1d                   3.30%
-   7. JPY_Ret_1d                     3.28%
-   8. US10Y_Change_5d                2.89%
-   9. Nikkei_Ret_1d                  2.67%
-  10. Oil_Ret_1d                     2.52%
-  11. Volatility                     2.46%
-  12. Gold_Ret_5d                    2.38%
-  13. US10Y_Level                    2.35%
-  14. JPY_Ret_10d                    2.33%
-  15. SP500_Ret_5d                   2.27%
+   1. DXY_Ret_1d                     9.92%
+   2. Gold_Ret_1d                    5.75%
+   3. VIX_Ret_1d                     4.51%
+   4. Gold_Silver_Ratio              3.76%
+   5. JPY_Ret_1d                     3.36%
+   6. SP500_Ret_1d                   3.29%
+   7. SP500_Ret_20d                  3.26%
+   8. US10Y_Change_5d                3.16%
+   9. US10Y_Level                    2.93%
+  10. Oil_Ret_1d                     2.71%
+  11. Nikkei_Ret_1d                  2.63%
+  12. SP500_Ret_5d                   2.27%
+  13. Gold_Platinum_Ratio            2.20%
+  14. Volatility                     2.17%
+  15. JPY_Ret_10d                    2.11%
 
 Disclaimer: For educational purposes only.
